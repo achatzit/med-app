@@ -1,0 +1,137 @@
+<!--
+  This template loads for the 'tab.friend-detail' state (app.js)
+  'friend' is a $scope variable created in the FriendsCtrl controller (controllers.js)
+  The FriendsCtrl pulls data from the Friends service (service.js)
+  The Friends service returns an array of friend data {{medicine.id}}
+-->
+
+<ion-view>
+  <ion-nav-title>{{medName.$value}}</ion-nav-title>
+  <p>"Στοιχεία Φάρμακου:"
+  </p>
+  <ion-content class="padding">
+    <form name="myForm" ng-controller="MedDetailCtrl">
+    <h3>
+      Όνομα : <input type="text" ng-model="medName.$value" />
+      Δόση  :      <input type="number" name="input" ng-model="medDosage.$value"
+               min="0.5" max="5" step="0.5" required />
+      Τύπος : <input type="text" ng-model="medType.$value" />
+
+    </h3>
+
+  </form>
+  <div id="two" ng-controller="SettingsCtrl">
+    <div>
+      <ion-list>
+      <ion-toggle  ng-model="settings.enableReminders">
+          Ενεργοποίηση υπενθυμίσεων
+      </ion-toggle>
+      </ion-list>
+      <ng-show ng-show="settings.enableReminders">
+        <h3>
+          <br>
+          <label for="medTimeInput">Δώσε την ώρα λήψης:</label>
+          <input type="time" id="exampleInput" name="input" ng-model="medTime.value"
+             placeholder="HH:ΜΜ" required />
+          <div role="alert">
+           <span class="error" ng-show="myForm.input.$error.required">
+               Απαιτείται!</span>
+           <span class="error" ng-show="myForm.input.$error.time">
+               Μη έγκυρη ημερομηνία!</span>
+          </div>
+
+      </h3>
+    </ng-show>
+
+  </div>
+</div>
+
+<!--
+    <h3>
+      Τύπος :
+      <select name="typeSelect" id="typeSelect" ng-model="medType.$value">
+        <option value="">---Τύπος φαρμάκου---</option> <!-- not selected / blank option
+        <option value="{{data.option1}}">Χάπι</option> <!-- interpolation
+        <option value="option-2">Κάψουλα</option>
+        <option value="option-3">Σιρόπι</option>
+        <option value="option-4">Σταγόνες</option>
+      </select><br>
+
+    </h3>
+
+
+
+   <h3>
+      Τύπος : {{medType.$value }}
+    </h3>
+    <div ng-repeat="data in medData" >
+      {{ data.$id }}: {{ data.$value }}
+  </div>
+   <img ng-src="{{chat.face}}" style="width: 64px; height: 64px">
+
+
+
+    <form name="myForm" ng-controller="medTimeController as dateCtrl">
+
+        <select name="typeSelect" id="typeSelect" ng-model="data.typeSelect">
+          <option value="">---Τύπος φαρμάκου---</option> <!-- not selected / blank option
+          <option value="{{data.option1}}">Χάπι</option> <!-- interpolation
+          <option value="option-2">Κάψουλα</option>
+          <option value="option-3">Σιρόπι</option>
+          <option value="option-4">Σταγόνες</option>
+        </select><br>
+<!--         <button ng-click="forceUnknownOption()">Άλλο</button><br>
+        <tt>singleSelect = {{data.typeSelect}}</tt>
+
+        <label for="medTimeInput">Δώσε την ώρα λήψης:</label>
+        <input type="time" id="exampleInput" name="input" ng-model="medTime.value"
+           placeholder="HH:ΜΜ" required />
+        <div role="alert">
+         <span class="error" ng-show="myForm.input.$error.required">
+             Απαιτείται!</span>
+         <span class="error" ng-show="myForm.input.$error.time">
+             Μη έγκυρη ημερομηνία!</span>
+        </div>
+<!--         <tt>value = {{medTime.value | date: "HH:mm:ss"}}</tt><br/>
+        <tt>myForm.input.$valid = {{myForm.input.$valid}}</tt><br/>
+        <tt>myForm.input.$error = {{myForm.input.$error}}</tt><br/>
+        <tt>myForm.$valid = {{myForm.$valid}}</tt><br/>
+        <tt>myForm.$error.required = {{!!myForm.$error.required}}</tt><br/>
+-->
+<!--    </form>
+
+    <form name="myForm" ng-controller="medAmountController">
+      <label>Ποσότητα Λήψης:<input type="number" name="input" ng-model="medAmount.value"
+               min="0.5" max="5" step="0.5" required />
+     </label>
+      <div role="alert">
+        <span class="error" ng-show="myForm.input.$error.required">
+          Απαιτείται!</span>
+        <span class="error" ng-show="myForm.input.$error.number">
+          Μη έγκυρη δόση!</span>
+      </div>
+       <tt>value = {{medAmount.value}}</tt><br/>
+      <tt>myForm.input.$valid = {{myForm.input.$valid}}</tt><br/>
+      <tt>myForm.input.$error = {{myForm.input.$error}}</tt><br/>
+      <tt>myForm.$valid = {{myForm.$valid}}</tt><br/>
+      <tt>myForm.$error.required = {{!!myForm.$error.required}}</tt><br/>
+
+     </form>
+
+-->
+
+
+
+  </ion-content>
+<!--
+  <div id="two" ng-controller="NotificationController">
+    <div>
+    <button class="button button-full button-positive" ng-click="addReminder()" >
+        Notification 1
+    </button>
+
+  </div>
+</div>
+-->
+
+</ion-view>
