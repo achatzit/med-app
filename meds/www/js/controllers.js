@@ -1,9 +1,31 @@
-angular.module('starter.controllers', [])
 
-.controller("List2Ctrl", function($scope, $stateParams, Medicine) {
-  $scope.medName = Medicine.getName($stateParams.medID);
 
+angular.module('starter.controllers', ['ionic', 'firebase'])
+
+.factory('Medicine', function ($firebaseArray, $firebaseObject) {
+  var ref = new Firebase("https://fir-project-68529.firebaseio.com");
+  var meds = $firebaseArray(ref.child("medicines"));
+  console.log(meds);
+  var Medicine = {
+    all: meds,
+    getName: function (medID) {
+      return $firebaseObject(ref.child("medicines/"+medID+"/name"));
+    },
+    getDosage: function (medID) {
+      return $firebaseObject(ref.child("medicines/"+medID+"/dosage"));
+    },
+    getType: function (medID) {
+      return $firebaseObject(ref.child("medicines/"+medID+"/type"));
+    },
+    getAll: function (medID) {
+      return $firebaseArray(ref.child("medicines").child(medID));
+      //  return $firebaseArray(ref.child(medID));
+    }
+  };
+
+  return Medicine;
 })
+
 
 .controller("ListCtrl", function($scope, $ionicListDelegate,Medicines) {
   $scope.medicines = Medicines;
@@ -44,26 +66,8 @@ angular.module('starter.controllers', [])
 
 
 .controller('HomeCtrl', function($scope) {})
-/*
-.controller('ChatsCtrl', function($scope, Chats) {
-  // With the new view caching in Ionic, Controllers are only called
-  // when they are recreated or on app start, instead of every page change.
-  // To listen for when this page is active (for example, to refresh data),
-  // listen for the $ionicView.enter event:
-  //
-  //$scope.$on('$ionicView.enter', function(e) {
-  //});
 
-  $scope.chats = Chats.all();
-  $scope.remove = function(chat) {
-    Chats.remove(chat);
-  };
-})
-*/
 .controller('MedDetailCtrl', function($scope, $stateParams, Medicine) {
-//  $scope.chat = Chats.get($stateParams.chatId);
-//  $scope.chat = getMedicine($stateParams.medicine.id);
-//  $scope.chat = Medicine.all;
 
   $scope.medName = Medicine.getName($stateParams.medID);
   $scope.medDosage = Medicine.getDosage($stateParams.medID);

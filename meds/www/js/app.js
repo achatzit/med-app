@@ -3,45 +3,15 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-// 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
 
-angular.module('starter', ['ionic', 'firebase', 'starter.controllers', 'starter.services'])
+angular.module('starter', ['ionic', 'firebase', 'starter.controllers'])
 
 
 .factory("Medicines", function($firebaseArray) {
   var medicinesRef = new Firebase("https://fir-project-68529.firebaseio.com/medicines");
   return $firebaseArray(medicinesRef);
 })
-
-
-angular.module('starter.services', ['ionic', 'firebase', 'starter.controllers', 'starter.services'])
-
-
-.factory('Medicine', function ($firebaseArray, $firebaseObject) {
-  var ref = new Firebase("https://fir-project-68529.firebaseio.com");
-  var meds = $firebaseArray(ref.child("medicines"));
-  console.log(meds);
-  var Medicine = {
-    all: meds,
-    getName: function (medID) {
-      return $firebaseObject(ref.child("medicines/"+medID+"/name"));
-    },
-    getDosage: function (medID) {
-      return $firebaseObject(ref.child("medicines/"+medID+"/dosage"));
-    },
-    getType: function (medID) {
-      return $firebaseObject(ref.child("medicines/"+medID+"/type"));
-    },
-    getAll: function (medID) {
-      return $firebaseArray(ref.child("medicines").child(medID));
-      //  return $firebaseArray(ref.child(medID));
-    }
-  };
-
-  return Medicine;
-})
-
 
 
 .run(function($ionicPlatform) {
