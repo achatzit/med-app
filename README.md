@@ -1,9 +1,9 @@
-# med-app using Ionic Framework and Firebase(still under development...)
+# med-app using Ionic Framework and Firebase (still under development...)
 Drug Adherence Monitoring and Reminder
 
 * Project's Home: https://github.com/achatzit/med-app
 
-## Dependecies, Run and Build 
+## Dependecies, Run and Build
 
 ### Install NodeJS dependencies
 
@@ -53,11 +53,11 @@ $ ionic build ios
 iOS:
 
 ```bash
-$ ionic emulate ios 
+$ ionic emulate ios
 ```
 
 Android:
 
 ```bash
-$ ionic emulate android 
+$ ionic emulate android
 ```
