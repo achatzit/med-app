@@ -26,13 +26,19 @@ angular.module('starter.controllers', ['ionic', 'firebase'])
   return Medicine;
 })
 
+.controller("MedicineCtrl", function($scope, $stateParams, $firebaseObject) {
+    var ref = new Firebase("https://fir-project-68529.firebaseio.com/medicines/" + $stateParams.medID);
+    // download medicine's profile data into a local object
+    // all server changes are applied in realtime
+    $scope.SelectedMed = $firebaseObject(ref);
+  })
 
 .controller("ListCtrl", function($scope, $ionicListDelegate,Medicines) {
   $scope.medicines = Medicines;
   $scope.addMed = function() {
     var name = prompt("Καταχωρήστε ένα νέο φάρμακο: ");
     var type = prompt("Είδος: ");
-    var dosage = prompt("Δοσολογία: ");
+    var dosage = parseInt(prompt("Δοσολογία: "));
     if (name && type && dosage) {
       $scope.medicines.$add({
         "name": name,
@@ -53,7 +59,6 @@ angular.module('starter.controllers', ['ionic', 'firebase'])
     medicineRef.remove(onComplete);
 
   };
-
 
   var onComplete = function(error) {
     if (error) {

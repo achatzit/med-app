@@ -2,13 +2,15 @@
   <ion-nav-title>{{medName.$value}}</ion-nav-title>
   <p>"Στοιχεία Φάρμακου:"
   </p>
+
+
   <ion-content class="padding">
-    <form name="myForm" ng-controller="MedDetailCtrl">
+    <form name="myForm">
     <h3>
-      Όνομα : <input type="text" ng-model="medName.$value" />
-      Δόση  :      <input type="number" name="input" ng-model="medDosage.$value"
+      Όνομα : <input type="text" ng-model="SelectedMed.name" ng-change="SelectedMed.$save()"/>
+      Δόση  :      <input type="number" name="input" ng-model="SelectedMed.dosage" ng-change="SelectedMed.$save()"
                min="0.5" max="5" step="0.5" required />
-      Τύπος : <input type="text" ng-model="medType.$value" />
+      Τύπος : <input type="text" ng-model="SelectedMed.type" ng-change="SelectedMed.$save()" />
       <div role="alert">
         <span class="error" ng-show="myForm.input.$error.required">
           Απαιτείται!</span>
@@ -16,8 +18,8 @@
           Μη έγκυρη δόση!</span>
       </div>
     </h3>
-
   </form>
+
   <div id="two" ng-controller="SettingsCtrl">
     <div>
       <ion-list>

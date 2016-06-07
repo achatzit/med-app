@@ -1,4 +1,4 @@
-# med-app using Ionic Framework
+# med-app using Ionic Framework and Firebase(under construction yet...)
 Drug Adherence Monitoring and Reminder
 
 * Project's Home: https://github.com/achatzit/med-app
