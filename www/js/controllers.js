@@ -31,6 +31,7 @@ angular.module('starter.controllers', ['ionic', 'firebase'])
     // download medicine's profile data into a local object
     // all server changes are applied in realtime
     $scope.SelectedMed = $firebaseObject(ref);
+    $scope.medTypes = ['Χάπι','Κάψουλα','Σιρόπι'];
   })
 
 .controller("ListCtrl", function($scope, $ionicListDelegate,Medicines) {
