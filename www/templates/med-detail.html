@@ -24,15 +24,54 @@
         </label>
 
       </div>
-      <div role="alert">
+<!--      <div role="alert">
         <span class="error" ng-show="myForm.input.$error.required">
           Απαιτείται!</span>
         <span class="error" ng-show="myForm.input.$error.number">
           Μη έγκυρη δόση!</span>
       </div>
       </div>
+-->
+
+      <div id="two"> <!-- ng-controller="ReminderController"> -->
+        <div>
+          <h3>
+            <br>
+            <label for="medTimeInput">Δώσε την ώρα λήψης:</label>
+            <br>
+            <span class="col-18" ng-click="showTimePicker()">
+               {{SelectedMed.remTime | date: 'HH:mm'}}
+            </span>
+            <br>
+<!--            <input type="text" ng-model="SelectedMed.remTime" ng-change="SelectedMed.$save()"
+               />
+               <button class="button" ng-click="SelectedMed.$save()">Αποθήκευση</button>
+               <input type="text" ng-model="SelectedMed.remTime | date:'MM/dd/yyyy @ h:mma'" ng-change="SelectedMed.$save()"/>
+
+             <input type="text" id="exampleInput" name="medTimeInput" ng-model="SelectedMed.remTime | date:'MM/dd/yyyy @ h:mma'" ng-change="SelectedMed.$save()"/>
+           <div role="alert">
+             <span class="error" ng-show="myForm.input.$error.required">
+                 Απαιτείται!</span>
+             <span class="error" ng-show="myForm.input.$error.time">
+                 Μη έγκυρη ημερομηνία!</span>
+            </div>
+-->
+            <ion-toggle  ng-model="SelectedMed.remSwitch" ng-change="SelectedMed.$save()" ng-click="scheduleDelayedNotification()">
+                Ενεργοποίηση ειδοποίησης
+            </ion-toggle>
+<!--            <div>
+              <button class="button" ng-click="add()">Εισαγωγή υπενθύμισης</button>
+              <button class="button" ng-click="isScheduled()">Is Scheduled</button>
+            </div>
+-->          </h3>
+        </div>
+      </div>
+
+
     </form>
 
+
+<!--
   <div id="two" ng-controller="SettingsCtrl">
     <div>
       <ion-list>
@@ -59,7 +98,8 @@
   </div>
 </div>
 
-<!--
+
+
 
    <img ng-src="{{chat.face}}" style="width: 64px; height: 64px">
 
@@ -81,9 +121,8 @@
 
 -->
 
-
-
   </ion-content>
+
 <!--
   <div id="two" ng-controller="NotificationController">
     <div>

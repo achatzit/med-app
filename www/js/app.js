@@ -5,19 +5,25 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
 
-angular.module('starter', ['ionic', 'firebase', 'starter.controllers'])
+angular.module('starter', ['ionic', 'firebase', 'starter.controllers', "ngCordova"])
 
 
 .factory("Medicines", function($firebaseArray) {
   var medicinesRef = new Firebase("https://fir-project-68529.firebaseio.com/medicines");
+//  var remCounter = 0;
   return $firebaseArray(medicinesRef);
 })
 
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $rootScope, $timeout) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
+    $rootScope.counter = 0;
+
+    if(device.platform === "iOS") {
+        window.plugin.notification.local.promptForPermission();
+    }
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
       cordova.plugins.Keyboard.disableScroll(true);
@@ -27,6 +33,88 @@ angular.module('starter', ['ionic', 'firebase', 'starter.controllers'])
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+    window.plugin.notification.local.onadd = function (id, state, json) {
+      var notification = {
+          id: id,
+          state: state,
+          json: json
+      };
+      $timeout(function() {
+          $rootScope.$broadcast("$cordovaLocalNotification:added", notification);
+      });
+    };
+    // A local notification was scheduled
+    window.cordova.plugins.notification.local.on('schedule', function (notification, state) {
+      $timeout(function () {
+        $rootScope.$broadcast('$cordovaLocalNotification:schedule', notification, state);
+      });
+    });
+
+    // A local notification was triggered
+    window.cordova.plugins.notification.local.on('trigger', function (notification, state) {
+      $timeout(function () {
+        $rootScope.$broadcast('$cordovaLocalNotification:trigger', notification, state);
+      });
+    });
+
+    // ----- "Update" events
+
+    // A local notification was updated
+    window.cordova.plugins.notification.local.on('update', function (notification, state) {
+      $timeout(function () {
+        $rootScope.$broadcast('$cordovaLocalNotification:update', notification, state);
+      });
+    });
+
+    // ----- "Clear" events
+
+    // A local notification was cleared from the notification center
+    window.cordova.plugins.notification.local.on('clear', function (notification, state) {
+      $timeout(function () {
+        $rootScope.$broadcast('$cordovaLocalNotification:clear', notification, state);
+      });
+    });
+
+    // All local notifications were cleared from the notification center
+    window.cordova.plugins.notification.local.on('clearall', function (state) {
+      $timeout(function () {
+        $rootScope.$broadcast('$cordovaLocalNotification:clearall', state);
+      });
+    });
+
+    // ----- "Cancel" events NEW
+
+    // A local notification was cancelled
+    $window.cordova.plugins.notification.local.on('cancel', function (notification, state) {
+      $timeout(function () {
+        $rootScope.$broadcast('$cordovaLocalNotification:cancel', notification, state);
+      });
+    });
+
+    // All local notifications were cancelled
+    $window.cordova.plugins.notification.local.on('cancelall', function (state) {
+      $timeout(function () {
+        $rootScope.$broadcast('$cordovaLocalNotification:cancelall', state);
+      });
+    });
+
+    // ----- "Cancel" events
+
+    /* A local notification was cancelled
+    window.cordova.plugins.notification.local.on('cancel', function (notification, state) {
+      $timeout(function () {
+        $rootScope.$broadcast('$cordovaLocalNotification:cancel', notification, state);
+      });
+    });
+
+    // A local notification was cancelled
+    window.cordova.plugins.notification.local.on('cancel', function (notification, state) {
+      $timeout(function () {
+        $rootScope.$broadcast('$cordovaLocalNotification:cancel', notification, state);
+      });
+    });
+
+    */
   });
 })
 
