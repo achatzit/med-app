@@ -37,12 +37,23 @@
         <div>
           <h3>
             <br>
-            <label for="medTimeInput">Δώσε την ώρα λήψης:</label>
+            <label>Δώστε την ώρα λήψης:</label>
+              <br>
+              <div>
+              <span class="col-18" ng-click="showTimePicker()">
+                 {{SelectedMed.remTime | date: 'HH:mm'}}
+              </span>
+              </div>
+
             <br>
-            <span class="col-18" ng-click="showTimePicker()">
-               {{SelectedMed.remTime | date: 'HH:mm'}}
-            </span>
-            <br>
+
+            <label class="item item-input item-select">
+              <div class="input-label">
+                Επανάληψη κάθε:
+              </div>
+              <select ng-model="SelectedMed.repeats" ng-options="repeat for repeat in repeats" ng-change="SelectedMed.$save()"></select>
+            </label>
+
 <!--            <input type="text" ng-model="SelectedMed.remTime" ng-change="SelectedMed.$save()"
                />
                <button class="button" ng-click="SelectedMed.$save()">Αποθήκευση</button>
@@ -56,7 +67,7 @@
                  Μη έγκυρη ημερομηνία!</span>
             </div>
 -->
-            <ion-toggle  ng-model="SelectedMed.remSwitch" ng-change="SelectedMed.$save()" ng-click="scheduleDelayedNotification()">
+            <ion-toggle  ng-model="SelectedMed.remSwitch" ng-change="SelectedMed.$save()" ng-click="selectNotifications()">
                 Ενεργοποίηση ειδοποίησης
             </ion-toggle>
 <!--            <div>

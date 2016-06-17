@@ -38,6 +38,7 @@ angular.module('starter.controllers', ['ionic', 'firebase'])
     // Το παρακάτω ίσως δεν χρειάζεται
     $scope.SelectedMed.remTime = ref.child("remTime");
     $scope.medTypes = ['Χάπι','Κάψουλα','Σιρόπι'];
+    $scope.repeats = ['(χωρίς)','ημέρα','εβδομάδα','μήνα'];
 
     $scope.showTimePicker = function() {
 //    var options = {date: $filter('date')($scope.SelectedMed.remTime, 'HH:mm'), mode: 'time'};
@@ -46,22 +47,49 @@ angular.module('starter.controllers', ['ionic', 'firebase'])
 //        $scope.SelectedMed.remTime = $filter('date')(date, 'HH:mm');
         $scope.SelectedMed.remTime = date.getTime();
         $scope.SelectedMed.$save();
-        $scope.scheduleDelayedNotification();
+        $scope.selectNotifications();
       });
     }
 //})
 
 //.controller("ReminderController", function($scope, $filter, $stateParams, $cordovaLocalNotification, $firebaseObject) {
 
-    $scope.$on("$cordovaLocalNotification:added", function(id, state, json) {
+
+
+
+    $scope.$on("$cordovaLocalNotification:schedule", function(id, state, json) {
       alert("Η υπενθύμιση ενεργοποιήθηκε!");
     });
+
+    $scope.$on("$cordovaLocalNotification:cancel", function(id, state, json) {
+      alert("Ακύρωση υπενθύμισης!");
+    });
+
+    $scope.selectNotifications = function () {
+        switch ($scope.SelectedMed.repeats) {
+            case '(χωρίς)':
+                $scope.scheduleDelayedNotification();
+                break;
+            case 'ημέρα':
+                $scope.scheduleEveryWeekNotification("day", 'Ημερήσια');
+                break;
+            case 'εβδομάδα':
+                $scope.scheduleEveryWeekNotification("week", 'Εβδομαδιαία');
+                break;
+            case 'μήνα':
+                $scope.scheduleEveryWeekNotification("month", 'Μηνιαία');
+                break;
+            default:
+
+        }
+    };
 
     $scope.scheduleSingleNotification = function () {
       $cordovaLocalNotification.schedule({
         id: 1,
         title: 'Title here',
         text: 'Text here',
+        autoCancel: false,
         data: {
           customProperty: 'custom value'
         }
@@ -70,15 +98,28 @@ angular.module('starter.controllers', ['ionic', 'firebase'])
       });
     };
 
-    $scope.scheduleEveryWeekNotification = function () {
-      $cordovaLocalNotification.schedule({
-        id: 1,
-        title: 'Title here',
-        text: 'Text here',
-        every: 'week'
-      }).then(function (result) {
-        // ...
-      });
+    $scope.scheduleEveryWeekNotification = function (repeat, message) {
+      if ($scope.SelectedMed.remSwitch) {
+        var alarmTime = new Date($scope.SelectedMed.remTime);
+        var tmStamp = new Date().getTime();
+        var medicine = $scope.SelectedMed.name;
+        $cordovaLocalNotification.schedule({
+          id: tmStamp,
+          title: message + ' υπενθύμιση',
+          text: medicine,
+          autoCancel: false,
+          at: alarmTime,
+          every: repeat
+        }).then(function (result) {
+          // ...
+        });
+        $scope.SelectedMed.remID = tmStamp;
+        $scope.SelectedMed.$save();
+      } else {
+
+      $scope.cancelSingleNotification();
+
+      }
     };
 
     $scope.scheduleDelayedNotification = function () {
@@ -89,11 +130,12 @@ angular.module('starter.controllers', ['ionic', 'firebase'])
           alarmTime.setMinutes(alarmTime.getMinutes());
           $rootScope.counter++;
           var tmStamp = new Date().getTime();
-          var tmStamp2 = tmStamp.toString();
+//          var tmStamp2 = tmStamp.toString();
           $cordovaLocalNotification.schedule({
             id: tmStamp,
             title: "Υπενθύμιση Φαρμάκου",
             text: medicine,
+            autoCancel: false,
             at: alarmTime
           }).then(function (result) {
             //
@@ -163,6 +205,7 @@ angular.module('starter.controllers', ['ionic', 'firebase'])
         "remTime": Firebase.ServerValue.TIMESTAMP,
         "remID": new Date().getTime(),
         "remSwitch": false,
+        "repeats": "",
       });
     }
   };
