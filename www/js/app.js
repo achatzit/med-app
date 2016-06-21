@@ -5,12 +5,11 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
 
-angular.module('starter', ['ionic', 'firebase', 'starter.controllers', "ngCordova"])
+angular.module('starter', ['ionic', 'firebase', 'starter.controllers', 'ngCordova'])
 
 
 .factory("Medicines", function($firebaseArray) {
   var medicinesRef = new Firebase("https://fir-project-68529.firebaseio.com/medicines");
-//  var remCounter = 0;
   return $firebaseArray(medicinesRef);
 })
 
@@ -19,7 +18,6 @@ angular.module('starter', ['ionic', 'firebase', 'starter.controllers', "ngCordov
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
-    $rootScope.counter = 0;
 
     if(device.platform === "iOS") {
         window.plugin.notification.local.promptForPermission();
@@ -35,6 +33,15 @@ angular.module('starter', ['ionic', 'firebase', 'starter.controllers', "ngCordov
     }
 
 
+    cordova.plugins.notification.local.on("schedule", function(notification) {
+      alert("Η υπενθύμιση για το φάρμακο "+notification.text+" ενεργοποιήθηκε!");
+    });
+
+/*
+    cordova.plugins.notification.local.on("cancel", function(notification) {
+      alert("Ακύρωση υπενθύμισης φαρμάκου "+notification.id+" !");
+    });
+*/
   });
 })
 
@@ -94,12 +101,22 @@ angular.module('starter', ['ionic', 'firebase', 'starter.controllers', "ngCordov
       }
     })
 
-    .state('tab.set-detail', {
-      url: '/settings/:ind',
+    .state('tab.users', {
+      url: '/settings/0',
       views: {
         'tab-settings': {
-          templateUrl: 'templates/tab-set-details.html',
+          templateUrl: 'templates/tab-users.html',
           controller: 'SettingsCtrl'
+        }
+      }
+    })
+
+    .state('tab.notifications', {
+      url: '/settings/1',
+      views: {
+        'tab-settings': {
+          templateUrl: 'templates/tab-notifications.html',
+          controller: 'MedicineCtrl'
         }
       }
     });

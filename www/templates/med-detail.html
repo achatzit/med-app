@@ -54,19 +54,6 @@
               <select ng-model="SelectedMed.repeats" ng-options="repeat for repeat in repeats" ng-change="SelectedMed.$save()"></select>
             </label>
 
-<!--            <input type="text" ng-model="SelectedMed.remTime" ng-change="SelectedMed.$save()"
-               />
-               <button class="button" ng-click="SelectedMed.$save()">Αποθήκευση</button>
-               <input type="text" ng-model="SelectedMed.remTime | date:'MM/dd/yyyy @ h:mma'" ng-change="SelectedMed.$save()"/>
-
-             <input type="text" id="exampleInput" name="medTimeInput" ng-model="SelectedMed.remTime | date:'MM/dd/yyyy @ h:mma'" ng-change="SelectedMed.$save()"/>
-           <div role="alert">
-             <span class="error" ng-show="myForm.input.$error.required">
-                 Απαιτείται!</span>
-             <span class="error" ng-show="myForm.input.$error.time">
-                 Μη έγκυρη ημερομηνία!</span>
-            </div>
--->
             <ion-toggle  ng-model="SelectedMed.remSwitch" ng-change="SelectedMed.$save()" ng-click="selectNotifications()">
                 Ενεργοποίηση ειδοποίησης
             </ion-toggle>
@@ -82,67 +69,5 @@
     </form>
 
 
-<!--
-  <div id="two" ng-controller="SettingsCtrl">
-    <div>
-      <ion-list>
-      <ion-toggle  ng-model="settings.enableReminders">
-          Ενεργοποίηση υπενθυμίσεων
-      </ion-toggle>
-      </ion-list>
-      <ng-show ng-show="settings.enableReminders">
-        <h3>
-          <br>
-          <label for="medTimeInput">Δώσε την ώρα λήψης:</label>
-          <input type="time" id="exampleInput" name="input" ng-model="medTime.value"
-             placeholder="HH:ΜΜ" required />
-          <div role="alert">
-           <span class="error" ng-show="myForm.input.$error.required">
-               Απαιτείται!</span>
-           <span class="error" ng-show="myForm.input.$error.time">
-               Μη έγκυρη ημερομηνία!</span>
-          </div>
-
-      </h3>
-    </ng-show>
-
-  </div>
-</div>
-
-
-
-
-   <img ng-src="{{chat.face}}" style="width: 64px; height: 64px">
-
-
-
-    <form name="myForm" ng-controller="medTimeController as dateCtrl">
-
-        <select name="typeSelect" id="typeSelect" ng-model="data.typeSelect">
-          <option value="">---Τύπος φαρμάκου---</option> <!-- not selected / blank option
-          <option value="{{data.option1}}">Χάπι</option> <!-- interpolation
-          <option value="option-2">Κάψουλα</option>
-          <option value="option-3">Σιρόπι</option>
-          <option value="option-4">Σταγόνες</option>
-        </select><br>
-        <button ng-click="forceUnknownOption()">Άλλο</button><br>
-        <tt>singleSelect = {{data.typeSelect}}</tt>
-
-    </form>
-
--->
-
   </ion-content>
-
-<!--
-  <div id="two" ng-controller="NotificationController">
-    <div>
-    <button class="button button-full button-positive" ng-click="addReminder()" >
-        Notification 1
-    </button>
-
-  </div>
-</div>
--->
-
 </ion-view>

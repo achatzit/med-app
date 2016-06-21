@@ -1,6 +1,6 @@
 
 
-angular.module('starter.controllers', ['ionic', 'firebase'])
+angular.module('starter.controllers',['ionic', 'firebase','jsonFormatter'])
 
 .factory('Medicine', function ($firebaseArray, $firebaseObject) {
   var ref = new Firebase("https://fir-project-68529.firebaseio.com");
@@ -29,7 +29,7 @@ angular.module('starter.controllers', ['ionic', 'firebase'])
   return Medicine;
 })
 
-.controller("MedicineCtrl", function($scope,$rootScope, $filter, $stateParams, $firebaseObject, $firebaseArray, $cordovaLocalNotification, $cordovaDatePicker) {
+.controller("MedicineCtrl", function($scope,$rootScope,$ionicPopup, $filter, $cordovaLocalNotification, $stateParams, $firebaseObject, $firebaseArray, $cordovaDatePicker) {
     var ref = new Firebase("https://fir-project-68529.firebaseio.com/medicines/" + $stateParams.medID);
     // download medicine's profile data into a local object
     // all server changes are applied in realtime
@@ -47,24 +47,20 @@ angular.module('starter.controllers', ['ionic', 'firebase'])
 //        $scope.SelectedMed.remTime = $filter('date')(date, 'HH:mm');
         $scope.SelectedMed.remTime = date.getTime();
         $scope.SelectedMed.$save();
-        $scope.selectNotifications();
+        if($scope.SelectedMed.remSwitch) {
+          $scope.selectNotifications();
+        }
       });
-    }
-//})
+    };
 
-//.controller("ReminderController", function($scope, $filter, $stateParams, $cordovaLocalNotification, $firebaseObject) {
-
-
-
-
-    $scope.$on("$cordovaLocalNotification:schedule", function(id, state, json) {
+/*    $scope.$on("$cordovaLocalNotification:schedule", function(id, state, json) {
       alert("Η υπενθύμιση ενεργοποιήθηκε!");
     });
 
     $scope.$on("$cordovaLocalNotification:cancel", function(id, state, json) {
       alert("Ακύρωση υπενθύμισης!");
     });
-
+*/
     $scope.selectNotifications = function () {
         switch ($scope.SelectedMed.repeats) {
             case '(χωρίς)':
@@ -84,41 +80,25 @@ angular.module('starter.controllers', ['ionic', 'firebase'])
         }
     };
 
-    $scope.scheduleSingleNotification = function () {
-      $cordovaLocalNotification.schedule({
-        id: 1,
-        title: 'Title here',
-        text: 'Text here',
-        autoCancel: false,
-        data: {
-          customProperty: 'custom value'
-        }
-      }).then(function (result) {
-        // ...
-      });
-    };
-
     $scope.scheduleEveryWeekNotification = function (repeat, message) {
       if ($scope.SelectedMed.remSwitch) {
         var alarmTime = new Date($scope.SelectedMed.remTime);
         var tmStamp = new Date().getTime();
         var medicine = $scope.SelectedMed.name;
-        $cordovaLocalNotification.schedule({
+        $scope.cancelSingleNotification();
+        $scope.SelectedMed.remID = tmStamp;
+        $scope.SelectedMed.$save();
+        cordova.plugins.notification.local.schedule({
           id: tmStamp,
           title: message + ' υπενθύμιση',
           text: medicine,
-          autoCancel: false,
+          autoCancel: true,
           at: alarmTime,
           every: repeat
-        }).then(function (result) {
-          // ...
         });
-        $scope.SelectedMed.remID = tmStamp;
-        $scope.SelectedMed.$save();
       } else {
-
-      $scope.cancelSingleNotification();
-
+          $scope.cancelSingleNotification();
+          alert("Ακύρωση υπενθύμισης φαρμάκου "+$scope.SelectedMed.name+" !");
       }
     };
 
@@ -128,63 +108,119 @@ angular.module('starter.controllers', ['ionic', 'firebase'])
           var medicine = $scope.SelectedMed.name;
 //          var _10SecondsFromNow = new Date(now + 60 * 1000);
           alarmTime.setMinutes(alarmTime.getMinutes());
-          $rootScope.counter++;
           var tmStamp = new Date().getTime();
-//          var tmStamp2 = tmStamp.toString();
-          $cordovaLocalNotification.schedule({
+          $scope.cancelSingleNotification();
+          $scope.SelectedMed.remID = tmStamp;
+          $scope.SelectedMed.$save();
+          cordova.plugins.notification.local.schedule({
             id: tmStamp,
             title: "Υπενθύμιση Φαρμάκου",
             text: medicine,
-            autoCancel: false,
+            autoCancel: true,
             at: alarmTime
-          }).then(function (result) {
-            //
           });
-          $scope.SelectedMed.remID = tmStamp;
-          $scope.SelectedMed.$save();
       } else {
-
-        $scope.cancelSingleNotification();
-
+          $scope.cancelSingleNotification();
+          alert("Ακύρωση υπενθύμισης φαρμάκου "+$scope.SelectedMed.name+" !");
       }
     };
+
 
     $scope.cancelSingleNotification = function () {
       var cancelRem = $scope.SelectedMed.remID;
-      $cordovaLocalNotification.cancel(cancelRem).then(function (result) {
-        $scope.SelectedMed.remID = 0;
-        $scope.SelectedMed.$save();
-        // ...
+      cordova.plugins.notification.local.cancel(cancelRem);
+      $scope.SelectedMed.remID = 0;
+      $scope.SelectedMed.$save();
+    };
+
+
+
+
+    $scope.getAllNotIDs = function() {
+      setTimeout(function() {
+        $scope.$apply(function() {
+          cordova.plugins.notification.local.getAll(function (notifs) {
+            $scope.notifs = notifs;
+          });
+        });
+      }, 2000);
+    };
+
+    $scope.getAllNotIDs();
+
+    $scope.getScheduledIDs = function() {
+      setTimeout(function() {
+        $scope.$apply(function() {
+          cordova.plugins.notification.local.getScheduled(function (notifs) {
+            $scope.Snotifs = notifs;
+          });
+        });
+      }, 2000);
+    };
+
+    $scope.getScheduledIDs();
+
+    $scope.getTriggeredIDs = function() {
+      setTimeout(function() {
+        $scope.$apply(function() {
+          cordova.plugins.notification.local.getTriggered(function (notifs) {
+            $scope.Tnotifs = notifs;
+          });
+        });
+      }, 2000);
+    };
+
+    $scope.getTriggeredIDs();
+
+    $scope.clearAllIDs = function() {
+      var confirmPopup = $ionicPopup.confirm({
+        title: 'Εκκαθάριση υπενθυμίσεων',
+        template: 'Θέλετε να εκκαθαρίσετε τις ήδη ενεργοποιημένες υπενθυμίσεις;'
       });
+
+      confirmPopup.then(function(res) {
+        if(res) {
+          setTimeout(function() {
+            $scope.$apply(function() {
+              cordova.plugins.notification.local.clearAll(function () {
+                alert("Έγινε εκκαθάριση των ήδη ενεργοποιημένων υπενθυμίσεων");
+                window.location.reload();
+              });
+            });
+          }, 2000);
+        } else {
+//             console.log('Deletion canceled !');
+        }
+      });
+
     };
 
-    $scope.add = function() {
-      var alarmTime = new Date();
-//        var alarmTime = $filter('date')($scope.SelectedMed.remTime, 'hh:mm');
-      if ($scope.SelectedMed.remSwitch) {
-        alarmTime = $filter('date')($scope.SelectedMed.remTime, 'yyyy-MM-dd HH:mm:ss');
-        var medicine = $scope.SelectedMed.name;
-//        var now = new Date($scope.SelectedMed.remTime,'yyyy-MM-dd HH:mm:ss');
-//        alarmTime.setMinutes(alarmTime.getMinutes()+1);
-        $cordovaLocalNotification.add({
-            id: medicine+alarmTime.toString(),
-            date: alarmTime,
-            message: alarmTime + ' '+ medicine,
-            title: "Υπενθύμιση Φαρμάκου",
-            autoCancel: true,
-            sound: null
-        }).then(function () {
-            console.log("The notification has been set");
-        });
 
-      }
+    $scope.cancelAllIDs = function() {
+         var confirmPopup = $ionicPopup.confirm({
+           title: 'Διαγραφή μελλοντικών υπενθυμίσεων',
+           template: 'Θέλετε να διαγράψετε όλες τις μελλοντικές υπενθυμίσεις;'
+         });
+
+         confirmPopup.then(function(res) {
+           if(res) {
+             setTimeout(function() {
+               $scope.$apply(function() {
+                 cordova.plugins.notification.local.cancelAll(function () {
+                   alert("Έγινε διαγραφή όλων των μελλοντικών υπενθυμίσεων");
+                   window.location.reload();
+                 });
+               });
+             }, 2000);
+           } else {
+//             console.log('Deletion canceled !');
+           }
+         });
     };
 
-    $scope.isScheduled = function() {
-        $cordovaLocalNotification.isScheduled("1234").then(function(isScheduled) {
-            alert("Notification 1234 Scheduled: " + isScheduled);
-        });
-    }
+///    $scope.getAllNotIDs = $filter('json')(cordova.plugins.notification.local.getAll());
+
+
 
 })
 
@@ -234,26 +270,7 @@ angular.module('starter.controllers', ['ionic', 'firebase'])
 
 .controller('HomeCtrl', function($scope) {})
 
-.controller('MedDetailCtrl', function($scope, $stateParams, Medicine) {
-
-  $scope.medName = Medicine.getName($stateParams.medID);
-  $scope.medDosage = Medicine.getDosage($stateParams.medID);
-  $scope.medType = Medicine.getType($stateParams.medID);
-  $scope.medTime = Medicine.gettime($stateParams.medID);
-  $scope.medData = Medicine.getAll($stateParams.medID);
-
-  console.log($scope.chat);
-
-})
-
-.controller('medTimeController', ['$scope', function($scope) {
-  $scope.medTime = {
-    value: new Date(2016, 1, 1, 08, 00, 0)
-  };
-}])
-
-
 .controller('SettingsCtrl', function($scope) {
-  $scope.Setts = ["Χρήστες"];
+  $scope.Setts = ['Χρήστες','Υπενθυμίσεις'];
 
 });
