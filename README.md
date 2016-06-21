@@ -4,6 +4,8 @@ Drug Adherence Monitoring and Reminder
 * Project's Home: https://github.com/achatzit/med-app
 
 ### Last additions
+- clear & cancel Notifications (21/6/2016)
+- show notifications (All, Scheduled, Triggered) (19/6/2016)
 - keep notifications after restart (17/6/2016)
 - cancel Notifications (17/6/2016)
 - schedule Repeated Notifications (17/6/2016)
