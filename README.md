@@ -23,7 +23,7 @@ Run `npm install -g ionic cordova` to install ionic framework.
 
 ### Install Plugins and Javascript dependencies
 
-Windows users should run install.bat
+Windows users should run `install.bat`
 
 ### Run the app
 
