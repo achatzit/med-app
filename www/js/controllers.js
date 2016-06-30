@@ -53,14 +53,6 @@ angular.module('starter.controllers',['ionic', 'firebase','jsonFormatter'])
       });
     };
 
-/*    $scope.$on("$cordovaLocalNotification:schedule", function(id, state, json) {
-      alert("Η υπενθύμιση ενεργοποιήθηκε!");
-    });
-
-    $scope.$on("$cordovaLocalNotification:cancel", function(id, state, json) {
-      alert("Ακύρωση υπενθύμισης!");
-    });
-*/
     $scope.selectNotifications = function () {
         switch ($scope.SelectedMed.repeats) {
             case '(χωρίς)':
