@@ -1,5 +1,4 @@
 
-
 angular.module('starter.controllers',['ionic', 'firebase','jsonFormatter'])
 
 .factory('Medicine', function ($firebaseArray, $firebaseObject) {
@@ -29,10 +28,11 @@ angular.module('starter.controllers',['ionic', 'firebase','jsonFormatter'])
   return Medicine;
 })
 
-.controller("MedicineCtrl", function($scope,$rootScope,$ionicPopup, $filter, $cordovaLocalNotification, $stateParams, $firebaseObject, $firebaseArray, $cordovaDatePicker) {
+.controller("MedicineCtrl", function($scope,$rootScope,$ionicPopup, $filter, $stateParams, $firebaseObject, $firebaseArray, $cordovaDatePicker) {
     var ref = new Firebase("https://fir-project-68529.firebaseio.com/medicines/" + $stateParams.medID);
     // download medicine's profile data into a local object
     // all server changes are applied in realtime
+
 
     $scope.SelectedMed = $firebaseObject(ref);
     // Το παρακάτω ίσως δεν χρειάζεται
@@ -84,7 +84,7 @@ angular.module('starter.controllers',['ionic', 'firebase','jsonFormatter'])
       if ($scope.SelectedMed.remSwitch) {
         var alarmTime = new Date($scope.SelectedMed.remTime);
         var tmStamp = new Date().getTime();
-        var medicine = $scope.SelectedMed.name;
+        var medicine = $scope.SelectedMed.name + ' ' + $scope.SelectedMed.dosage + ' ' + $scope.SelectedMed.type ;
         $scope.cancelSingleNotification();
         $scope.SelectedMed.remID = tmStamp;
         $scope.SelectedMed.$save();
@@ -105,7 +105,7 @@ angular.module('starter.controllers',['ionic', 'firebase','jsonFormatter'])
     $scope.scheduleDelayedNotification = function () {
       if ($scope.SelectedMed.remSwitch) {
           var alarmTime = new Date($scope.SelectedMed.remTime);
-          var medicine = $scope.SelectedMed.name;
+          var medicine = $scope.SelectedMed.name + ' ' + $scope.SelectedMed.dosage + ' ' + $scope.SelectedMed.type ;
 //          var _10SecondsFromNow = new Date(now + 60 * 1000);
           alarmTime.setMinutes(alarmTime.getMinutes());
           var tmStamp = new Date().getTime();
@@ -117,7 +117,7 @@ angular.module('starter.controllers',['ionic', 'firebase','jsonFormatter'])
             title: "Υπενθύμιση Φαρμάκου",
             text: medicine,
             autoCancel: true,
-            at: alarmTime
+            firstAt: alarmTime
           });
       } else {
           $scope.cancelSingleNotification();
@@ -218,9 +218,37 @@ angular.module('starter.controllers',['ionic', 'firebase','jsonFormatter'])
          });
     };
 
-///    $scope.getAllNotIDs = $filter('json')(cordova.plugins.notification.local.getAll());
+    $scope.testPebble = function() {
+      Pebble.launchApp(
+        function() {
+            setTimeout(function() {
+              $scope.$apply(function() {
+              Pebble.sendAppMessage({124: "Επιτυχής σύνδεση με το κινητό!"},
+                  function() { },
+                  function(event) { alert('failure sending message'); });
+            });
+          }, 3000);
+        },
+        function(event) { alert('failure launching app'); });
+    };
 
 
+/*
+    $scope.testPebble = function() {
+      Pebble.setAppUUID("3985df0d-0058-46cf-9b2e-f0c8d0bc0fab",
+          function() {
+            Pebble.launchApp(
+                function() {
+                    Pebble.sendAppMessage({0: "hello"},
+                        function() { alert('Επιτυχής σύνδεση'); },
+                        function(event) { alert('failure sending message'); });
+                     },
+                function(event) { alert('failure launching app'); });
+            },
+          function(event) { alert('failure setting UUID');
+          });
+    };
+*/
 
 })
 
@@ -271,6 +299,6 @@ angular.module('starter.controllers',['ionic', 'firebase','jsonFormatter'])
 .controller('HomeCtrl', function($scope) {})
 
 .controller('SettingsCtrl', function($scope) {
-  $scope.Setts = ['Χρήστες','Υπενθυμίσεις'];
+  $scope.Setts = ['Χρήστες','Υπενθυμίσεις', 'Pebble'];
 
 });

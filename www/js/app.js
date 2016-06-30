@@ -32,12 +32,67 @@ angular.module('starter', ['ionic', 'firebase', 'starter.controllers', 'ngCordov
       StatusBar.styleDefault();
     }
 
+    Pebble.onConnect(
+      function(event) {
+        alert('Το ρολόι συνδέθηκε');
+      },
+      function(event) {
+        alert('Το ρολόι αποσυνδέθηκε');
+      }
+    );
 
+    Pebble.setAppUUID("3985df0d-0058-46cf-9b2e-f0c8d0bc0fab",
+      function() {
+      },
+      function(event) { alert('failure setting UUID');
+      }
+    );
+
+/*
+    Pebble.launchApp(
+        function() {
+         },
+        function(event) { alert('Αποτυχημένη σύνδεση'); }
+    );
+
+
+    Pebble.setAppUUID("3985df0d-0058-46cf-9b2e-f0c8d0bc0fab",
+        function() {
+            alert('watch connected');
+        },
+        function(event) {
+          alert('watch disconnected');
+        }
+    );
+
+    Pebble.onConnect(
+      function(event) {
+        alert('watch connected');
+        Pebble.onAppMessageReceived(function(message){
+            console.log(message);
+            alert(message);
+        });
+        Pebble.sendAppMessage({0: "hello"},
+          function() { alert('message sent'); },
+          function(event) { alert('message failure'+event.data); });
+      },
+      function(event) {
+        alert('watch disconnected');
+      }
+    );
+*/
     cordova.plugins.notification.local.on("schedule", function(notification) {
-      alert("Η υπενθύμιση για το φάρμακο "+notification.text+" ενεργοποιήθηκε!");
+      alert("Η υπενθύμιση για λήψη ("+notification.text+") ενεργοποιήθηκε!");
     });
 
 /*
+    cordova.plugins.notification.local.on("trigger", function(notification) {
+        alert("triggered: " + notification.id+notification.text+(new Date(notification.firstAt)));
+        cordova.plugins.notification.local.isTriggered(notification.id, function (present) {
+            alert(present ? "present" : "not found");
+        });
+    });
+
     cordova.plugins.notification.local.on("cancel", function(notification) {
       alert("Ακύρωση υπενθύμισης φαρμάκου "+notification.id+" !");
     });
@@ -119,7 +174,18 @@ angular.module('starter', ['ionic', 'firebase', 'starter.controllers', 'ngCordov
           controller: 'MedicineCtrl'
         }
       }
+    })
+
+    .state('tab.pebble', {
+      url: '/settings/2',
+      views: {
+        'tab-settings': {
+          templateUrl: 'templates/tab-pebble.html',
+          controller: 'MedicineCtrl'
+        }
+      }
     });
+
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/tab/home');
