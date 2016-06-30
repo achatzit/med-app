@@ -76,3 +76,16 @@ Android:
 ```bash
 $ ionic emulate android
 ```
+
+### Run the app on phone
+iOS:
+
+```bash
+$ ionic run ios
+```
+
+Android:
+
+```bash
+$ ionic run android
+```
