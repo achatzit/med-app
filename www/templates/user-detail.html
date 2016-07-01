@@ -1,0 +1,34 @@
+<ion-view>
+  <ion-nav-title>Χρήστες: {{SelectedUser.name}}</ion-nav-title>
+  <p>"Στοιχεία Χρήστη:"
+  </p>
+
+
+  <ion-content class="padding">
+    <form name="userForm">
+      <div class="user-list">
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">Όνομα</span>
+          <input type="text" ng-model="SelectedUser.name" ng-change="SelectedUser.$save()"/>
+        </label>
+        <label class="item item-input item-select">
+          <div class="input-label">
+            Ιδιότητα
+          </div>
+          <select ng-model="SelectedUser.type" ng-options="userType for userType in userTypes" ng-change="SelectedUser.$save()"></select>
+        </label>
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">E-mail</span>
+          <input type="text" ng-model="SelectedUser.email" ng-change="SelectedUser.$save()"/>
+        </label>
+        <label class="item item-input item-stacked-label">
+          <span class="input-label">Τηλέφωνο</span>
+          <input type="text" ng-model="SelectedUser.mobile" ng-change="SelectedUser.$save()"/>
+        </label>
+      </div>
+
+    </form>
+
+
+  </ion-content>
+</ion-view>

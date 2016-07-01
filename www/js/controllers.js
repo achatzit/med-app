@@ -1,5 +1,5 @@
 
-angular.module('starter.controllers',['ionic', 'firebase','jsonFormatter'])
+angular.module('starter.controllers',['ionic', 'firebase'])
 
 .factory('Medicine', function ($firebaseArray, $firebaseObject) {
   var ref = new Firebase("https://fir-project-68529.firebaseio.com");
@@ -27,6 +27,65 @@ angular.module('starter.controllers',['ionic', 'firebase','jsonFormatter'])
 
   return Medicine;
 })
+
+.factory('User', function ($firebaseArray, $firebaseObject) {
+  var ref = new Firebase("https://fir-project-68529.firebaseio.com");
+  var users = $firebaseArray(ref.child("users"));
+  console.log(users);
+  var User = {
+    all: users,
+    getAll: function (userID) {
+      return $firebaseArray(ref.child("users").child(userID));
+      //  return $firebaseArray(ref.child(medID));
+    }
+  };
+
+  return User;
+})
+
+.controller("UserCtrl", function($scope,$rootScope,$ionicPopup, $stateParams, $firebaseObject, $firebaseArray ) {
+    var ref = new Firebase("https://fir-project-68529.firebaseio.com/users/" + $stateParams.userID);
+    // download user's profile data into a local object
+    // all server changes are applied in realtime
+
+    $scope.SelectedUser = $firebaseObject(ref);
+    $scope.userTypes = ['Ασθενής','Ιατρός','Συγγενής'];
+
+})
+
+
+.controller("UserListCtrl", function($scope, $filter, $ionicListDelegate,Users) {
+  $scope.users = Users;
+  $scope.addUser = function() {
+    var name = prompt("Καταχωρήστε το όνομα του χρήστη: ");
+    var type = prompt("Ιδιότητα: ");
+    var email = prompt("E-mail: ");
+    var mobile = prompt("Κινητό τηλ.: ");
+    if (name) {
+      $scope.users.$add({
+        "name": name,
+        "type": type,
+        "email": email,
+        "mobile": mobile,
+      });
+    }
+  };
+
+  $scope.deleteUser = function(user) {
+    var userRef = new Firebase("https://fir-project-68529.firebaseio.com/users/" + user.$id);
+    userRef.remove(onComplete);
+
+  };
+
+  var onComplete = function(error) {
+    if (error) {
+      console.log('Synchronization failed');
+    } else {
+      console.log('Synchronization succeeded');
+    }
+  };
+})
+
 
 .controller("MedicineCtrl", function($scope,$rootScope,$ionicPopup, $filter, $stateParams, $firebaseObject, $firebaseArray, $cordovaDatePicker) {
     var ref = new Firebase("https://fir-project-68529.firebaseio.com/medicines/" + $stateParams.medID);
@@ -246,7 +305,7 @@ angular.module('starter.controllers',['ionic', 'firebase','jsonFormatter'])
 
 
 
-.controller("ListCtrl", function($scope, $filter, $ionicListDelegate,Medicines) {
+.controller("MedListCtrl", function($scope, $filter, $ionicListDelegate,Medicines) {
   $scope.medicines = Medicines;
   $scope.addMed = function() {
     var name = prompt("Καταχωρήστε ένα νέο φάρμακο: ");

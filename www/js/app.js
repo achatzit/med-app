@@ -14,6 +14,13 @@ angular.module('starter', ['ionic', 'firebase', 'starter.controllers', 'ngCordov
 })
 
 
+.factory("Users", function($firebaseArray) {
+  var usersRef = new Firebase("https://fir-project-68529.firebaseio.com/users");
+  return $firebaseArray(usersRef);
+})
+
+
+
 .run(function($ionicPlatform, $rootScope, $timeout) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -127,64 +134,72 @@ angular.module('starter', ['ionic', 'firebase', 'starter.controllers', 'ngCordov
     }
   })
   .state('tab.meds', {
-      url: '/meds',
-      views: {
-        'tab-meds': {
-          templateUrl: 'templates/tab-meds.html',
-          controller: 'ListCtrl'
-        }
+    url: '/meds',
+    views: {
+      'tab-meds': {
+        templateUrl: 'templates/tab-meds.html',
+        controller: 'MedListCtrl'
       }
-    })
-    .state('tab.med-detail', {
-      url: '/meds/:medID',
-      views: {
-        'tab-meds': {
-          templateUrl: 'templates/med-detail.html',
-          controller: 'MedicineCtrl'
-//          controller: 'ListCtrl'
-        }
+    }
+  })
+  .state('tab.med-detail', {
+    url: '/meds/:medID',
+    views: {
+      'tab-meds': {
+        templateUrl: 'templates/med-detail.html',
+        controller: 'MedicineCtrl'
       }
-    })
+    }
+  })
 
-    .state('tab.settings', {
-      url: '/settings',
-      views: {
-        'tab-settings': {
-          templateUrl: 'templates/tab-settings.html',
-          controller: 'SettingsCtrl'
-        }
+  .state('tab.settings', {
+    url: '/settings',
+    views: {
+      'tab-settings': {
+        templateUrl: 'templates/tab-settings.html',
+        controller: 'SettingsCtrl'
       }
-    })
+    }
+  })
 
-    .state('tab.users', {
-      url: '/settings/0',
-      views: {
-        'tab-settings': {
-          templateUrl: 'templates/tab-users.html',
-          controller: 'SettingsCtrl'
-        }
+  .state('tab.users', {
+    url: '/settings/0',
+    views: {
+      'tab-settings': {
+        templateUrl: 'templates/tab-users.html',
+        controller: 'UserListCtrl'
       }
-    })
+    }
+  })
+  .state('tab.user-detail', {
+    url: '/settings/0/:userID',
+    views: {
+      'tab-settings': {
+        templateUrl: 'templates/user-detail.html',
+        controller: 'UserCtrl'
+      }
+    }
+  })
 
-    .state('tab.notifications', {
-      url: '/settings/1',
-      views: {
-        'tab-settings': {
-          templateUrl: 'templates/tab-notifications.html',
-          controller: 'MedicineCtrl'
-        }
+  .state('tab.notifications', {
+    url: '/settings/1',
+    views: {
+      'tab-settings': {
+        templateUrl: 'templates/tab-notifications.html',
+        controller: 'MedicineCtrl'
       }
-    })
+    }
+  })
 
-    .state('tab.pebble', {
-      url: '/settings/2',
-      views: {
-        'tab-settings': {
-          templateUrl: 'templates/tab-pebble.html',
-          controller: 'MedicineCtrl'
-        }
+  .state('tab.pebble', {
+    url: '/settings/2',
+    views: {
+      'tab-settings': {
+        templateUrl: 'templates/tab-pebble.html',
+        controller: 'MedicineCtrl'
       }
-    });
+    }
+  });
 
 
   // if none of the above states are matched, use this as the fallback
