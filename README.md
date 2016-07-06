@@ -4,6 +4,8 @@ Drug Adherence Monitoring and Reminder
 * Project's Home: https://github.com/achatzit/med-app
 
 ### Last additions
+- notifications history added (6/7/2016)
+- medicine intake approval (5/7/2016)
 - users added (1/7/2016)
 - running app on Pebble and sending msgs (30/6/2016)
 - pushing notifications to Pebble (28/6/2016) (Notification Center for Pebble needed)
