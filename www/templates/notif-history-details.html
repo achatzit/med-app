@@ -1,0 +1,37 @@
+<ion-view>
+  <ion-nav-title>Υπενθύμιση: {{SelectedNotif.medicine}}</ion-nav-title>
+
+
+  <ion-content class="padding">
+    <form name="notifForm">
+      <p><b>Στοιχεία Υπενθύμισης:
+      </b></p>
+      <div class="notif-list">
+        <label class="item item-input item-stacked-label">
+          <span>Ημερομηνία Υπενθύμισης:</span><br>
+          <span class="col-16"><b>
+             {{SelectedNotif.date}}
+          </span></b>
+        </label>
+        <label class="item item-input item-stacked-label">
+          <span>Ώρα λήψης:</span><br>
+          <span class="col-16"><b>
+             {{SelectedNotif.at}}
+          </span></b>
+        </label>
+        <label class="item item-input item-stacked-label">
+          <span>Επανάληψη:</span><br>
+          <span class="col-16"><b>
+            {{SelectedNotif.every == "day" ? "κάθε ημέρα" : (SelectedNotif.every == "week" ? "κάθε εβδομάδα" : (SelectedNotif.every == "month" ? "κάθε μήνα" : "-"))}}
+          </span></b>
+        </label>
+        <ion-toggle  ng-model="SelectedNotif.taken" ng-change="SelectedNotif.$save()">
+            Έγινε λήψη
+        </ion-toggle>
+    </div>
+
+    </form>
+
+
+  </ion-content>
+</ion-view>

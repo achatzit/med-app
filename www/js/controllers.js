@@ -1,46 +1,30 @@
 
 angular.module('starter.controllers',['ionic', 'firebase'])
 
-.factory('Medicine', function ($firebaseArray, $firebaseObject) {
-  var ref = new Firebase("https://fir-project-68529.firebaseio.com");
-  var meds = $firebaseArray(ref.child("medicines"));
-  console.log(meds);
-  var Medicine = {
-    all: meds,
-    getName: function (medID) {
-      return $firebaseObject(ref.child("medicines/"+medID+"/name"));
-    },
-    getDosage: function (medID) {
-      return $firebaseObject(ref.child("medicines/"+medID+"/dosage"));
-    },
-    getType: function (medID) {
-      return $firebaseObject(ref.child("medicines/"+medID+"/type"));
-    },
-    gettime: function (medID) {
-      return $firebaseObject(ref.child("medicines/"+medID+"/retTime"));
-    },
-    getAll: function (medID) {
-      return $firebaseArray(ref.child("medicines").child(medID));
-      //  return $firebaseArray(ref.child(medID));
-    }
-  };
 
-  return Medicine;
+
+.controller("NotificationsCtrl", function($scope,$rootScope,$ionicPopup, $stateParams, $firebaseObject, $firebaseArray ) {
+  var ref = new Firebase("https://fir-project-68529.firebaseio.com/notifications/" + $stateParams.notifID);
+
+    $scope.SelectedNotif = $firebaseObject(ref);
+    $scope.DateRem = Date(ref.child("date"));
 })
 
-.factory('User', function ($firebaseArray, $firebaseObject) {
-  var ref = new Firebase("https://fir-project-68529.firebaseio.com");
-  var users = $firebaseArray(ref.child("users"));
-  console.log(users);
-  var User = {
-    all: users,
-    getAll: function (userID) {
-      return $firebaseArray(ref.child("users").child(userID));
-      //  return $firebaseArray(ref.child(medID));
-    }
+.controller("NotifListCtrl", function($scope, $filter, $ionicListDelegate,Notifications) {
+  $scope.notifs = Notifications;
+
+  $scope.deleteNotif = function(notif) {
+    var notifRef = new Firebase("https://fir-project-68529.firebaseio.com/notifications/" + notif.$id);
+    notifRef.remove(onComplete);
   };
 
-  return User;
+  var onComplete = function(error) {
+    if (error) {
+      console.log('Synchronization failed');
+    } else {
+      console.log('Synchronization succeeded');
+    }
+  };
 })
 
 .controller("UserCtrl", function($scope,$rootScope,$ionicPopup, $stateParams, $firebaseObject, $firebaseArray ) {
@@ -52,7 +36,6 @@ angular.module('starter.controllers',['ionic', 'firebase'])
     $scope.userTypes = ['Ασθενής','Ιατρός','Συγγενής'];
 
 })
-
 
 .controller("UserListCtrl", function($scope, $filter, $ionicListDelegate,Users) {
   $scope.users = Users;
@@ -67,6 +50,7 @@ angular.module('starter.controllers',['ionic', 'firebase'])
         "type": type,
         "email": email,
         "mobile": mobile,
+        "notifications":{},
       });
     }
   };
@@ -135,6 +119,7 @@ angular.module('starter.controllers',['ionic', 'firebase'])
       if ($scope.SelectedMed.remSwitch) {
         var alarmTime = new Date($scope.SelectedMed.remTime);
         var tmStamp = new Date().getTime();
+        var medicineId = $scope.SelectedMed.$id;
         var medicine = $scope.SelectedMed.name + ' ' + $scope.SelectedMed.dosage + ' ' + $scope.SelectedMed.type ;
         $scope.cancelSingleNotification();
         $scope.SelectedMed.remID = tmStamp;
@@ -143,9 +128,12 @@ angular.module('starter.controllers',['ionic', 'firebase'])
           id: tmStamp,
           title: message + ' υπενθύμιση',
           text: medicine,
-          autoCancel: true,
+          autoCancel:false,
+          ongoing: true,
+          firstAt: alarmTime,
           at: alarmTime,
-          every: repeat
+          every: repeat,
+          data: medicineId
         });
       } else {
           $scope.cancelSingleNotification();
@@ -157,8 +145,9 @@ angular.module('starter.controllers',['ionic', 'firebase'])
       if ($scope.SelectedMed.remSwitch) {
           var alarmTime = new Date($scope.SelectedMed.remTime);
           var medicine = $scope.SelectedMed.name + ' ' + $scope.SelectedMed.dosage + ' ' + $scope.SelectedMed.type ;
+          var medicineId = $scope.SelectedMed.$id;
 //          var _10SecondsFromNow = new Date(now + 60 * 1000);
-          alarmTime.setMinutes(alarmTime.getMinutes());
+//          alarmTime.setMinutes(alarmTime.getMinutes());
           var tmStamp = new Date().getTime();
           $scope.cancelSingleNotification();
           $scope.SelectedMed.remID = tmStamp;
@@ -167,8 +156,11 @@ angular.module('starter.controllers',['ionic', 'firebase'])
             id: tmStamp,
             title: "Υπενθύμιση Φαρμάκου",
             text: medicine,
-            autoCancel: true,
-            firstAt: alarmTime
+            autoCancel:false,
+            ongoing: true,
+            firstAt: alarmTime,
+            at: alarmTime,
+            data: medicineId
           });
       } else {
           $scope.cancelSingleNotification();
@@ -200,25 +192,25 @@ angular.module('starter.controllers',['ionic', 'firebase'])
     $scope.getAllNotIDs();
 
     $scope.getScheduledIDs = function() {
-      setTimeout(function() {
-        $scope.$apply(function() {
+//      setTimeout(function() {
+//        $scope.$apply(function() {
           cordova.plugins.notification.local.getScheduled(function (notifs) {
             $scope.Snotifs = notifs;
           });
-        });
-      }, 2000);
+//        });
+//      }, 2000);
     };
 
     $scope.getScheduledIDs();
 
     $scope.getTriggeredIDs = function() {
-      setTimeout(function() {
-        $scope.$apply(function() {
+//      setTimeout(function() {
+//        $scope.$apply(function() {
           cordova.plugins.notification.local.getTriggered(function (notifs) {
             $scope.Tnotifs = notifs;
           });
-        });
-      }, 2000);
+//        });
+//      }, 2000);
     };
 
     $scope.getTriggeredIDs();
@@ -274,7 +266,7 @@ angular.module('starter.controllers',['ionic', 'firebase'])
         function() {
             setTimeout(function() {
               $scope.$apply(function() {
-              Pebble.sendAppMessage({124: "Επιτυχής σύνδεση με το κινητό!"},
+              Pebble.sendAppMessage({124: "Hello!"},
                   function() { },
                   function(event) { alert('failure sending message'); });
             });
@@ -282,6 +274,7 @@ angular.module('starter.controllers',['ionic', 'firebase'])
         },
         function(event) { alert('failure launching app'); });
     };
+
 
 
 /*
@@ -350,6 +343,6 @@ angular.module('starter.controllers',['ionic', 'firebase'])
 .controller('HomeCtrl', function($scope) {})
 
 .controller('SettingsCtrl', function($scope) {
-  $scope.Setts = ['Χρήστες','Υπενθυμίσεις', 'Pebble'];
+  $scope.Setts = ['Υπενθυμίσεις','Χρήστες','Pebble'];
 
 });

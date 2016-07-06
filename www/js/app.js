@@ -13,15 +13,19 @@ angular.module('starter', ['ionic', 'firebase', 'starter.controllers', 'ngCordov
   return $firebaseArray(medicinesRef);
 })
 
-
 .factory("Users", function($firebaseArray) {
   var usersRef = new Firebase("https://fir-project-68529.firebaseio.com/users");
   return $firebaseArray(usersRef);
 })
 
+.factory("Notifications", function($firebaseArray) {
+  var notifsRef = new Firebase("https://fir-project-68529.firebaseio.com/notifications");
+  return $firebaseArray(notifsRef);
+})
 
 
-.run(function($ionicPlatform, $rootScope, $timeout) {
+
+.run(function($ionicPlatform, $filter, $ionicPopup,$cordovaLocalNotification, $rootScope, $timeout) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -92,7 +96,40 @@ angular.module('starter', ['ionic', 'firebase', 'starter.controllers', 'ngCordov
       alert("Η υπενθύμιση για λήψη ("+notification.text+") ενεργοποιήθηκε!");
     });
 
+
+    cordova.plugins.notification.local.on("trigger", function(notification) {
+//        updateTriggeredMeds(notification.id, notification.data, notification.text);
+        var notif_ref = new Firebase("https://fir-project-68529.firebaseio.com/notifications");
+        var newNotificationRef = notif_ref.push();
+            newNotificationRef.set({ 'notifID': notification.id, 'medicineID': notification.data, 'medicine': notification.text,'at': $filter('date')(new Date(notification.at*1000), 'h:mm a') ,'every': angular.isUndefined(notification.every) ? '-' : notification.every, 'date': $filter('date')(new Date(), 'd MMM, y h:mm a'), 'taken':false});
+      });
+
+
+      cordova.plugins.notification.local.on("click", function (notification) {
+        var notif_ref = new Firebase("https://fir-project-68529.firebaseio.com/notifications");
+        notif_ref.orderByChild("notifID").equalTo(notification.id).on("child_added", function(snapshot) {
+          var confirmPopup = $ionicPopup.confirm({
+            title: 'Ενημέρωση λήψης φαρμάκου',
+            template: 'Πήρατε το φάρμακό σας όπως προβλέπεται;'
+          });
+
+          confirmPopup.then(function(res) {
+            if(res) {
+              var update_ref = notif_ref.child(snapshot.key());
+              update_ref.update({ taken: true});
+              cordova.plugins.notification.local.clear(notification.id, function() {
+              });
+            } else {
+    //             console.log('Deletion canceled !');
+            }
+          });
+        });
+      });
+
 /*
+cordova.plugins.notification.local.on("click", function (notification) {
+    askConfirmation(notification.id, notification.data);
+});
     cordova.plugins.notification.local.on("trigger", function(notification) {
         alert("triggered: " + notification.id+notification.text+(new Date(notification.firstAt)));
         cordova.plugins.notification.local.isTriggered(notification.id, function (present) {
@@ -152,49 +189,70 @@ angular.module('starter', ['ionic', 'firebase', 'starter.controllers', 'ngCordov
     }
   })
 
-  .state('tab.settings', {
-    url: '/settings',
+  .state('tab.options', {
+    url: '/options',
     views: {
-      'tab-settings': {
-        templateUrl: 'templates/tab-settings.html',
+      'tab-options': {
+        templateUrl: 'templates/tab-options.html',
         controller: 'SettingsCtrl'
       }
     }
   })
 
-  .state('tab.users', {
-    url: '/settings/0',
-    views: {
-      'tab-settings': {
-        templateUrl: 'templates/tab-users.html',
-        controller: 'UserListCtrl'
-      }
-    }
-  })
-  .state('tab.user-detail', {
-    url: '/settings/0/:userID',
-    views: {
-      'tab-settings': {
-        templateUrl: 'templates/user-detail.html',
-        controller: 'UserCtrl'
-      }
-    }
-  })
-
   .state('tab.notifications', {
-    url: '/settings/1',
+    url: '/options/0',
     views: {
-      'tab-settings': {
+      'tab-options': {
         templateUrl: 'templates/tab-notifications.html',
         controller: 'MedicineCtrl'
       }
     }
   })
 
-  .state('tab.pebble', {
-    url: '/settings/2',
+  .state('tab.notif-history', {
+    url: '/options/0/0',
     views: {
-      'tab-settings': {
+      'tab-options': {
+        templateUrl: 'templates/notif-history.html',
+        controller: 'NotifListCtrl'
+      }
+    }
+  })
+
+  .state('tab.notifications-details', {
+    url: '/options/0/0/:notifID',
+    views: {
+      'tab-options': {
+        templateUrl: 'templates/notif-history-details.html',
+        controller: 'NotificationsCtrl'
+      }
+    }
+  })
+
+  .state('tab.users', {
+    url: '/options/1',
+    views: {
+      'tab-options': {
+        templateUrl: 'templates/tab-users.html',
+        controller: 'UserListCtrl'
+      }
+    }
+  })
+
+  .state('tab.user-detail', {
+    url: '/options/1/:userID',
+    views: {
+      'tab-options': {
+        templateUrl: 'templates/user-detail.html',
+        controller: 'UserCtrl'
+      }
+    }
+  })
+
+  .state('tab.pebble', {
+    url: '/options/2',
+    views: {
+      'tab-options': {
         templateUrl: 'templates/tab-pebble.html',
         controller: 'MedicineCtrl'
       }

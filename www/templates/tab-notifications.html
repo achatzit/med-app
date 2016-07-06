@@ -3,13 +3,12 @@
 
   <ion-content>
     <form name="RemsForm">
-      <div>
 <!--        <json-formatter json="notifs" open="1"></json-formatter>
         <button class="button button-full button-positive" ng-click="getAllNotIDs(getAllNotIDs())">
             Ειδοποιήσεις
         </button>
       </div>
--->
+
       <div>
         <ion-toggle  checked="false" ng-model="allRems" ng-click="getAllNotIDs()">
             Όλες οι υπενθυμίσεις
@@ -19,7 +18,6 @@
               <ion-list>
                 <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="notif in notifs" type="item-text-wrap" >
                   <h4>
-<!--                    {{notif.text}} στις ({{notif.at*1000 | date: 'HH:mm'}}) {{notif.every == "day" ? "κάθε ημέρα" : ""}}{{notif.every == "week" ? "κάθε εβδομάδα" : ""}}{{notif.every == "month" ? "κάθε μήνα" : ""}} -->
                   {{notif.text}} στις ({{notif.at*1000 | date: 'HH:mm'}}) {{notif.every == "day" ? "κάθε ημέρα" : (notif.every == "week" ? "κάθε εβδομάδα" : (notif.every == "month" ? "κάθε μήνα" : ""))}}
                 </h4>
                   <ion-option-button class="button-assertive" ng-click="">
@@ -29,23 +27,11 @@
               </ion-list>
             </div>
       </div>
-
-
-      <div>
-        <ion-toggle  checked="false" ng-model="schRems"  ng-click="getScheduledIDs()">
-            Εκκρεμείς υπενθυμίσεις
-        </ion-toggle>
-
-            <div ng-show="schRems">
-              <ion-list>
-                <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="Snotif in Snotifs" type="item-text-wrap" >
-                  <h4>
-                  {{Snotif.text}} στις ({{Snotif.at*1000 | date: 'HH:mm'}}) {{Snotif.every == "day" ? "κάθε ημέρα" : (Snotif.every == "week" ? "κάθε εβδομάδα" : (Snotif.every == "month" ? "κάθε μήνα" : ""))}}
-                </h4>
-                </ion-item>
-              </ion-list>
-            </div>
-      </div>
+-->
+      <ion-item class=" item-avatar item-icon-right" type="item-text-wrap"  href="#/tab/options/0/0">
+        <h2>Ιστορικό Ειδοποιήσεων</h2>
+        <i class="icon ion-chevron-right icon-accessory"></i>
+      </ion-item>
 
       <div>
         <ion-toggle  checked="false" ng-model="trRems" ng-click="getTriggeredIDs()">
@@ -63,6 +49,22 @@
             </div>
       </div>
       <br>
+
+      <div>
+        <ion-toggle  checked="false" ng-model="schRems"  ng-click="getScheduledIDs()">
+            Μελλοντικές υπενθυμίσεις
+        </ion-toggle>
+
+            <div ng-show="schRems">
+              <ion-list>
+                <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="Snotif in Snotifs" type="item-text-wrap" >
+                  <h4>
+                  {{Snotif.text}} στις ({{Snotif.at*1000 | date: 'HH:mm'}}) {{Snotif.every == "day" ? "κάθε ημέρα" : (Snotif.every == "week" ? "κάθε εβδομάδα" : (Snotif.every == "month" ? "κάθε μήνα" : ""))}}
+                </h4>
+                </ion-item>
+              </ion-list>
+            </div>
+      </div>
 
       <div>
         <button class="button button-full button-positive" ng-click="clearAllIDs()" >

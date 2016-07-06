@@ -1,0 +1,18 @@
+
+<ion-view view-title="Ιστορικό ειδοποιήσεων">
+
+  <ion-nav-buttons side="right" ng-show="false">
+  </ion-nav-buttons>
+  <ion-content>
+   <ion-list>
+      <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="notif in notifs" type="item-text-wrap"  href="#/tab/options/0/0/{{notif.$id}}">
+        <h3>{{notif.date}}</h3>
+        <h2>{{notif.medicine}}</h2>
+        <i class="icon ion-chevron-right icon-accessory"></i>
+        <ion-option-button class="button-assertive" ng-click="deleteNotif(notif)">
+          <i class="ion-close-circled"></i>
+        </ion-option-button>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
