@@ -25,7 +25,7 @@ angular.module('starter', ['ionic', 'firebase', 'starter.controllers', 'ngCordov
 
 
 
-.run(function($ionicPlatform, $filter, $ionicPopup,$cordovaLocalNotification, $rootScope, $timeout) {
+.run(function($ionicPlatform, $filter, $ionicPopup, $rootScope, $timeout) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -153,7 +153,7 @@ cordova.plugins.notification.local.on("click", function (notification) {
   $stateProvider
 
   // setup an abstract state for the tabs directive
-    .state('tab', {
+  .state('tab', {
     url: '/tab',
     abstract: true,
     templateUrl: 'templates/tabs.html'

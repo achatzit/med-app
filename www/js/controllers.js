@@ -18,6 +18,22 @@ angular.module('starter.controllers',['ionic', 'firebase'])
     notifRef.remove(onComplete);
   };
 
+
+  $scope.medBehaviour = function() {
+    var notifRef = new Firebase("https://fir-project-68529.firebaseio.com/notifications");
+    notifRef.once("value", function(snapshot) {
+      $scope.sum1 = snapshot.numChildren();
+      $scope.intakes = 0;
+      snapshot.forEach(function(childSnapshot) {
+        var taken = childSnapshot.child("taken").val();
+
+//        var taken = key.child("taken");
+//        $scope.intakes++;
+        if (taken) $scope.intakes++;
+      });
+    });
+  };
+
   var onComplete = function(error) {
     if (error) {
       console.log('Synchronization failed');
@@ -180,13 +196,9 @@ angular.module('starter.controllers',['ionic', 'firebase'])
 
 
     $scope.getAllNotIDs = function() {
-      setTimeout(function() {
-        $scope.$apply(function() {
           cordova.plugins.notification.local.getAll(function (notifs) {
             $scope.notifs = notifs;
           });
-        });
-      }, 2000);
     };
 
     $scope.getAllNotIDs();
@@ -223,14 +235,10 @@ angular.module('starter.controllers',['ionic', 'firebase'])
 
       confirmPopup.then(function(res) {
         if(res) {
-          setTimeout(function() {
-            $scope.$apply(function() {
               cordova.plugins.notification.local.clearAll(function () {
                 alert("Έγινε εκκαθάριση των ήδη ενεργοποιημένων υπενθυμίσεων");
                 window.location.reload();
               });
-            });
-          }, 2000);
         } else {
 //             console.log('Deletion canceled !');
         }
@@ -247,14 +255,10 @@ angular.module('starter.controllers',['ionic', 'firebase'])
 
          confirmPopup.then(function(res) {
            if(res) {
-             setTimeout(function() {
-               $scope.$apply(function() {
                  cordova.plugins.notification.local.cancelAll(function () {
                    alert("Έγινε διαγραφή όλων των μελλοντικών υπενθυμίσεων");
                    window.location.reload();
                  });
-               });
-             }, 2000);
            } else {
 //             console.log('Deletion canceled !');
            }
