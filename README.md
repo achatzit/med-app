@@ -4,6 +4,8 @@ Drug Adherence Monitoring and Reminder
 * Project's Home: https://github.com/achatzit/med-app
 
 ### Last additions
+- patient adherence measurement added (11/7/2016)
+- medicine intake approval (4 ways added) (10/7/2016)
 - notifications history added (6/7/2016)
 - medicine intake approval (5/7/2016)
 - users added (1/7/2016)
@@ -29,11 +31,12 @@ Run `npm install -g ionic cordova` to install ionic framework.
 
 ### Install Plugins and Javascript dependencies
 
-cordova plugin add https://github.com/katzer/cordova-plugin-local-notifications
+run `ionic serve restore` to ask from Ionic to restore the state of the app
 
+if the process fails install the plugins manually:
+`cordova plugin add https://github.com/katzer/cordova-plugin-local-notifications
 cordova plugin add cordova-plugin-datepicker
-
-cordova plugin add https://github.com/tgardner/cordova-pebble.git
+cordova plugin add https://github.com/tgardner/cordova-pebble.git`
 
 ### Run the app
 

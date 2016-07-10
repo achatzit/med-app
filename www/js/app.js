@@ -26,6 +26,9 @@ angular.module('starter', ['ionic', 'firebase', 'starter.controllers', 'ngCordov
 
 
 .run(function($ionicPlatform, $filter, $ionicPopup, $rootScope, $timeout) {
+
+
+
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -101,13 +104,63 @@ angular.module('starter', ['ionic', 'firebase', 'starter.controllers', 'ngCordov
 //        updateTriggeredMeds(notification.id, notification.data, notification.text);
         var notif_ref = new Firebase("https://fir-project-68529.firebaseio.com/notifications");
         var newNotificationRef = notif_ref.push();
-            newNotificationRef.set({ 'notifID': notification.id, 'medicineID': notification.data, 'medicine': notification.text,'at': $filter('date')(new Date(notification.at*1000), 'h:mm a') ,'every': angular.isUndefined(notification.every) ? '-' : notification.every, 'date': $filter('date')(new Date(), 'd MMM, y h:mm a'), 'taken':false});
+            newNotificationRef.set({ 'notifID': notification.id, 'medicineID': notification.data, 'medicine': notification.text,'at': $filter('date')(new Date(notification.at*1000), 'h:mm a') ,'every': angular.isUndefined(notification.every) ? '-' : notification.every, 'date': $filter('date')(new Date(), 'd MMM, y h:mm a'), 'taken':"0"});
       });
 
 
       cordova.plugins.notification.local.on("click", function (notification) {
-        var notif_ref = new Firebase("https://fir-project-68529.firebaseio.com/notifications");
-        notif_ref.orderByChild("notifID").equalTo(notification.id).on("child_added", function(snapshot) {
+
+            var notif_ref = new Firebase("https://fir-project-68529.firebaseio.com/notifications");
+            notif_ref.orderByChild("notifID").equalTo(notification.id).on("child_added", function(snapshot) {
+                $rootScope.choice = {"id": 1};
+                var myPopup = $ionicPopup.show({
+            //              template: '<ul class="list"><li class="item item-radio">Checbox 1<label class="radio"><input type="radio"></label></li><li class="item item-radio">Checkbox 2<label class="radio"><input type="radio"></label></li></ul>',
+                  template: '<ion-radio ng-model="choice.id" ng-value="1"><h5>Το πήρα κανονικά</h5></ion-radio><ion-radio ng-model="choice.id" ng-value="2"><h5>Το πήρα με καθυστέρηση</h5></ion-radio><ion-radio ng-model="choice.id" ng-value="3"><h5>Δεν το πήρα/Δεν θα το πάρω</h5></ion-radio><ion-radio ng-model="choice.id" ng-value="4"><h5>Υπενθύμιση σε 30 λεπτά</h5></ion-radio>',
+                  title: 'Υπενθύμιση λήψης φαρμάκου',
+                  subTitle: 'sub',
+                  scope: $rootScope,
+                  buttons: [
+                    {
+                      text: 'Επιλογή',
+                      type: 'button-positive',
+                      onTap: function(e) {
+                        var update_ref = notif_ref.child(snapshot.key());
+                        update_ref.update({ taken: $rootScope.choice.id});
+                        switch ($rootScope.choice.id) {
+                            case 1:
+                                cordova.plugins.notification.local.clear(notification.id, function() {
+                                });
+                                break;
+                            case 2:
+                                cordova.plugins.notification.local.clear(notification.id, function() {
+                                });
+                                break;
+                            case 3:
+                                cordova.plugins.notification.local.clear(notification.id, function() {
+                                });
+                                break;
+                            case 4:
+                                cordova.plugins.notification.local.clear(notification.id, function() {
+                                });
+                                break;
+                          default:
+
+                        }
+                      }
+                    }
+                  ]
+                });
+
+              });
+
+
+        });
+
+
+/*
+
+
+
           var confirmPopup = $ionicPopup.confirm({
             title: 'Ενημέρωση λήψης φαρμάκου',
             template: 'Πήρατε το φάρμακό σας όπως προβλέπεται;'
@@ -123,8 +176,8 @@ angular.module('starter', ['ionic', 'firebase', 'starter.controllers', 'ngCordov
     //             console.log('Deletion canceled !');
             }
           });
-        });
-      });
+*/
+
 
 /*
 cordova.plugins.notification.local.on("click", function (notification) {
@@ -141,8 +194,20 @@ cordova.plugins.notification.local.on("click", function (notification) {
       alert("Ακύρωση υπενθύμισης φαρμάκου "+notification.id+" !");
     });
 */
+
+
+
+
   });
+
+
+
+
+
+
 })
+
+
 
 .config(function($stateProvider, $urlRouterProvider) {
 

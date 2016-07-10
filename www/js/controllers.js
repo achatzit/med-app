@@ -23,15 +23,24 @@ angular.module('starter.controllers',['ionic', 'firebase'])
     var notifRef = new Firebase("https://fir-project-68529.firebaseio.com/notifications");
     notifRef.once("value", function(snapshot) {
       $scope.sum1 = snapshot.numChildren();
-      $scope.intakes = 0;
+      $scope.intakes1 = 0;$scope.intakes2 = 0;$scope.intakes3 = 0;$scope.intakes4 = 0;$scope.intakes0 = 0;
       snapshot.forEach(function(childSnapshot) {
         var taken = childSnapshot.child("taken").val();
 
 //        var taken = key.child("taken");
 //        $scope.intakes++;
-        if (taken) $scope.intakes++;
+        if (taken == "1") $scope.intakes1++;
+        if (taken == "2") $scope.intakes2++;
+        if (taken == "3") $scope.intakes3++;
+        if (taken == "4") $scope.intakes4++;
+        if (taken == "0") $scope.intakes0++;
       });
     });
+    $scope.behaviour1 = $scope.intakes1*100/$scope.sum1;
+    $scope.behaviour2 = $scope.intakes2*100/$scope.sum1;
+    $scope.behaviour3 = $scope.intakes3*100/$scope.sum1;
+    $scope.behaviour4 = $scope.intakes4*100/$scope.sum1;
+    $scope.behaviour0 = $scope.intakes0*100/$scope.sum1;
   };
 
   var onComplete = function(error) {

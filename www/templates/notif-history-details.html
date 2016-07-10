@@ -25,9 +25,23 @@
             {{SelectedNotif.every == "day" ? "κάθε ημέρα" : (SelectedNotif.every == "week" ? "κάθε εβδομάδα" : (SelectedNotif.every == "month" ? "κάθε μήνα" : "-"))}}
           </span></b>
         </label>
-        <ion-toggle  ng-model="SelectedNotif.taken" ng-change="SelectedNotif.$save()">
-            Έγινε λήψη
-        </ion-toggle>
+        <div>
+          <ion-radio ng-model="SelectedNotif.taken" ng-value="1" ng-change="SelectedNotif.$save()">
+            <h5>Κανονική λήψη</h5>
+          </ion-radio>
+          <ion-radio ng-model="SelectedNotif.taken" ng-value="2" ng-change="SelectedNotif.$save()">
+            <h5>Λήψη με καθυστέρηση</h5>
+          </ion-radio>
+          <ion-radio ng-model="SelectedNotif.taken" ng-value="3" ng-change="SelectedNotif.$save()">
+            <h5>Μη πραγματοποιημένη λήψη</h5>
+          </ion-radio>
+          <ion-radio ng-model="SelectedNotif.taken" ng-value="4" ng-change="SelectedNotif.$save()">
+            <h5>Αίτηση αναβολής</h5>
+          </ion-radio>
+          <ion-radio ng-model="SelectedNotif.taken" ng-value="0" ng-change="SelectedNotif.$save()">
+            <h5>Ανεπιβεβαίωτη λήψη</h5>
+          </ion-radio>
+        <div>
     </div>
 
     </form>
