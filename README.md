@@ -34,9 +34,10 @@ Run `npm install -g ionic cordova` to install ionic framework.
 run `ionic serve restore` to ask from Ionic to restore the state of the app
 
 if the process fails install the plugins manually:
-`cordova plugin add https://github.com/katzer/cordova-plugin-local-notifications
-cordova plugin add cordova-plugin-datepicker
-cordova plugin add https://github.com/tgardner/cordova-pebble.git`
+`cordova plugin add https://github.com/katzer/cordova-plugin-local-notifications`
+`cordova plugin add cordova-plugin-datepicker`
+`cordova plugin add https://github.com/tgardner/cordova-pebble.git`
+
 
 ### Run the app
 

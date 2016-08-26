@@ -3,35 +3,7 @@
 
   <ion-content>
     <form name="RemsForm">
-<!--        <json-formatter json="notifs" open="1"></json-formatter>
-        <button class="button button-full button-positive" ng-click="getAllNotIDs(getAllNotIDs())">
-            Ειδοποιήσεις
-        </button>
-      </div>
 
-      <div>
-        <ion-toggle  checked="false" ng-model="allRems" ng-click="getAllNotIDs()">
-            Όλες οι υπενθυμίσεις
-        </ion-toggle>
-
-            <div ng-show="allRems">
-              <ion-list>
-                <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="notif in notifs" type="item-text-wrap" >
-                  <h4>
-                  {{notif.text}} στις ({{notif.at*1000 | date: 'HH:mm'}}) {{notif.every == "day" ? "κάθε ημέρα" : (notif.every == "week" ? "κάθε εβδομάδα" : (notif.every == "month" ? "κάθε μήνα" : ""))}}
-                </h4>
-                  <ion-option-button class="button-assertive" ng-click="">
-                    <i class="ion-close-circled"></i>
-                  </ion-option-button>
-                </ion-item>
-              </ion-list>
-            </div>
-      </div>
--->
-      <ion-item class=" item-avatar item-icon-right" type="item-text-wrap"  href="#/tab/options/0/0">
-        <h2>Ιστορικό Ειδοποιήσεων</h2>
-        <i class="icon ion-chevron-right icon-accessory"></i>
-      </ion-item>
 
       <div>
         <ion-toggle  checked="false" ng-model="trRems" ng-click="getTriggeredIDs()">
@@ -41,9 +13,9 @@
             <div ng-show="trRems">
               <ion-list>
                 <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="Tnotif in Tnotifs" type="item-text-wrap" >
-                  <h4>
+                  <h5>
                   {{Tnotif.text}} στις ({{Tnotif.at*1000 | date: 'HH:mm'}}) {{Tnotif.every == "day" ? "κάθε ημέρα" : (Tnotif.every == "week" ? "κάθε εβδομάδα" : (Tnotif.every == "month" ? "κάθε μήνα" : ""))}}
-                </h4>
+                </h5>
                 </ion-item>
               </ion-list>
             </div>
@@ -58,9 +30,9 @@
             <div ng-show="schRems">
               <ion-list>
                 <ion-item class="item-remove-animate item-avatar item-icon-right" ng-repeat="Snotif in Snotifs" type="item-text-wrap" >
-                  <h4>
+                  <h5>
                   {{Snotif.text}} στις ({{Snotif.at*1000 | date: 'HH:mm'}}) {{Snotif.every == "day" ? "κάθε ημέρα" : (Snotif.every == "week" ? "κάθε εβδομάδα" : (Snotif.every == "month" ? "κάθε μήνα" : ""))}}
-                </h4>
+                </h5>
                 </ion-item>
               </ion-list>
             </div>

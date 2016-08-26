@@ -117,7 +117,7 @@ angular.module('starter', ['ionic', 'firebase', 'starter.controllers', 'ngCordov
             //              template: '<ul class="list"><li class="item item-radio">Checbox 1<label class="radio"><input type="radio"></label></li><li class="item item-radio">Checkbox 2<label class="radio"><input type="radio"></label></li></ul>',
                   template: '<ion-radio ng-model="choice.id" ng-value="1"><h5>Το πήρα κανονικά</h5></ion-radio><ion-radio ng-model="choice.id" ng-value="2"><h5>Το πήρα με καθυστέρηση</h5></ion-radio><ion-radio ng-model="choice.id" ng-value="3"><h5>Δεν το πήρα/Δεν θα το πάρω</h5></ion-radio><ion-radio ng-model="choice.id" ng-value="4"><h5>Υπενθύμιση σε 30 λεπτά</h5></ion-radio>',
                   title: 'Υπενθύμιση λήψης φαρμάκου',
-                  subTitle: 'sub',
+                  subTitle: notification.text,
                   scope: $rootScope,
                   buttons: [
                     {
@@ -125,7 +125,7 @@ angular.module('starter', ['ionic', 'firebase', 'starter.controllers', 'ngCordov
                       type: 'button-positive',
                       onTap: function(e) {
                         var update_ref = notif_ref.child(snapshot.key());
-                        update_ref.update({ taken: $rootScope.choice.id});
+                        update_ref.update({ taken: $rootScope.choice.id.toString()});
                         switch ($rootScope.choice.id) {
                             case 1:
                                 cordova.plugins.notification.local.clear(notification.id, function() {
@@ -264,8 +264,28 @@ cordova.plugins.notification.local.on("click", function (notification) {
     }
   })
 
-  .state('tab.notifications', {
+  .state('tab.takes-history', {
     url: '/options/0',
+    views: {
+      'tab-options': {
+        templateUrl: 'templates/takes-history.html',
+        controller: 'NotifListCtrl'
+      }
+    }
+  })
+
+  .state('tab.takes-details', {
+    url: '/options/0/:notifID',
+    views: {
+      'tab-options': {
+        templateUrl: 'templates/takes-history-details.html',
+        controller: 'NotificationsCtrl'
+      }
+    }
+  })
+
+  .state('tab.notifications', {
+    url: '/options/1',
     views: {
       'tab-options': {
         templateUrl: 'templates/tab-notifications.html',
@@ -274,28 +294,8 @@ cordova.plugins.notification.local.on("click", function (notification) {
     }
   })
 
-  .state('tab.notif-history', {
-    url: '/options/0/0',
-    views: {
-      'tab-options': {
-        templateUrl: 'templates/notif-history.html',
-        controller: 'NotifListCtrl'
-      }
-    }
-  })
-
-  .state('tab.notifications-details', {
-    url: '/options/0/0/:notifID',
-    views: {
-      'tab-options': {
-        templateUrl: 'templates/notif-history-details.html',
-        controller: 'NotificationsCtrl'
-      }
-    }
-  })
-
   .state('tab.users', {
-    url: '/options/1',
+    url: '/options/2',
     views: {
       'tab-options': {
         templateUrl: 'templates/tab-users.html',
@@ -305,7 +305,7 @@ cordova.plugins.notification.local.on("click", function (notification) {
   })
 
   .state('tab.user-detail', {
-    url: '/options/1/:userID',
+    url: '/options/2/:userID',
     views: {
       'tab-options': {
         templateUrl: 'templates/user-detail.html',
@@ -315,7 +315,7 @@ cordova.plugins.notification.local.on("click", function (notification) {
   })
 
   .state('tab.pebble', {
-    url: '/options/2',
+    url: '/options/3',
     views: {
       'tab-options': {
         templateUrl: 'templates/tab-pebble.html',

@@ -2,7 +2,6 @@
 angular.module('starter.controllers',['ionic', 'firebase'])
 
 
-
 .controller("NotificationsCtrl", function($scope,$rootScope,$ionicPopup, $stateParams, $firebaseObject, $firebaseArray ) {
   var ref = new Firebase("https://fir-project-68529.firebaseio.com/notifications/" + $stateParams.notifID);
 
@@ -356,6 +355,6 @@ angular.module('starter.controllers',['ionic', 'firebase'])
 .controller('HomeCtrl', function($scope) {})
 
 .controller('SettingsCtrl', function($scope) {
-  $scope.Setts = ['Υπενθυμίσεις','Χρήστες','Pebble'];
+  $scope.Setts = ['Λήψεις','Υπενθυμίσεις','Χρήστες','Pebble'];
 
 });

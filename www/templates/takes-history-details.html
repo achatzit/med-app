@@ -25,24 +25,22 @@
             {{SelectedNotif.every == "day" ? "κάθε ημέρα" : (SelectedNotif.every == "week" ? "κάθε εβδομάδα" : (SelectedNotif.every == "month" ? "κάθε μήνα" : "-"))}}
           </span></b>
         </label>
-        <div>
-          <ion-radio ng-model="SelectedNotif.taken" ng-value="1" ng-change="SelectedNotif.$save()">
-            <h5>Κανονική λήψη</h5>
-          </ion-radio>
-          <ion-radio ng-model="SelectedNotif.taken" ng-value="2" ng-change="SelectedNotif.$save()">
-            <h5>Λήψη με καθυστέρηση</h5>
-          </ion-radio>
-          <ion-radio ng-model="SelectedNotif.taken" ng-value="3" ng-change="SelectedNotif.$save()">
-            <h5>Μη πραγματοποιημένη λήψη</h5>
-          </ion-radio>
-          <ion-radio ng-model="SelectedNotif.taken" ng-value="4" ng-change="SelectedNotif.$save()">
-            <h5>Αίτηση αναβολής</h5>
-          </ion-radio>
-          <ion-radio ng-model="SelectedNotif.taken" ng-value="0" ng-change="SelectedNotif.$save()">
-            <h5>Ανεπιβεβαίωτη λήψη</h5>
-          </ion-radio>
-        <div>
-    </div>
+
+        <div class="list">
+          <label class="item item-input item-select">
+            <div class="input-label">
+            Λήψη:
+            </div>
+            <select ng-model="SelectedNotif.taken" ng-change="SelectedNotif.$save()">
+              <option value= "1">Κανονική λήψη</option>
+              <option value= "2">Λήψη με καθυστέρηση</option>
+              <option value= "3">Μη πραγματοποιημένη λήψη</option>
+          	  <option value= "4">Αίτηση αναβολής</option>
+          	  <option value= "0">Ανεπιβεβαίωτη λήψη</option>
+            </select>
+          </label>
+
+        </div>
 
     </form>
 
