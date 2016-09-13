@@ -18,11 +18,18 @@
         </label>
         <label class="item item-input item-select">
           <div class="input-label">
-            Τύπος
+            Είδος
           </div>
           <select ng-model="SelectedMed.type" ng-options="medType for medType in medTypes" ng-change="SelectedMed.$save()"></select>
         </label>
 
+<!-- iconselect       <label class="item item-input item-stacked-label">
+          <span>Ώρα λήψης:</span><br>
+          <span class="col-16"><b>
+            <div id="my-icon-select"></div>
+          </span></b>
+        </label>
+-->
       </div>
 <!--      <div role="alert">
         <span class="error" ng-show="myForm.input.$error.required">

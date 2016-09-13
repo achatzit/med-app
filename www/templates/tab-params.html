@@ -1,0 +1,44 @@
+<ion-view >
+  <ion-nav-title>Παράμετροι</ion-nav-title>
+  <ion-pane>
+
+  <ion-content>
+    <form name="ParamsForm" >
+      <div class="col col-center" style="text-align:center;">
+            <h4>Τρέχον επίπεδο πρόσβασης: {{SelectedParams.curPwd}}</h4>
+      </div>
+      <label class="item item-input item-stacked-label">
+        <span class="input-label">Κωδικός</span>
+        <input placeholder="Password" ng-model="pwd" required pattern=".{2,}" type="password">
+      </input>
+      </label>
+      <button class="button button-full button-positive" ng-click="chkAccessPwd(pwd)">
+          Καταχώρηση
+      </button>
+     <div class="col-16" ng-hide="(SelectedParams.curPwd < 1)">
+       <div>
+         <ion-toggle  ng-model="SelectedParams.sms" ng-change="SelectedParams.$save()">
+             Αποστολή SMS
+         </ion-toggle>
+
+         <div ng-show="SelectedParams.sms">
+
+         <label class="item item-input item-stacked-label">
+           <span class="input-label">Όριο Φαρμακευτικής Συμπεριφοράς</span>
+           <input type="number" name="input" ng-model="SelectedParams.behaviour" ng-change="SelectedParams.$save()"
+                    min="1" max="99" step="1" required />
+         </label>
+         <label class="item item-input item-stacked-label">
+           <span class="input-label">Τηλέφωνο αποστολής ενημερωτικού SMS</span>
+           <input type="text" name="input" ng-model="SelectedParams.smsNo" ng-change="SelectedParams.$save()"/>
+         </label>
+
+        </div>
+
+       </div>
+     </div>
+    </form>
+  </ion-content>
+</ion-pane>
+
+</ion-view>

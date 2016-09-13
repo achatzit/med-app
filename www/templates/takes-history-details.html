@@ -31,7 +31,10 @@
             <div class="input-label">
             Λήψη:
             </div>
-            <select ng-model="SelectedNotif.taken" ng-change="SelectedNotif.$save()">
+            <span class="col-16" ng-show="(SelectedParams.curPwd == 0)"><b>
+              {{SelectedNotif.taken == 1 ? "Κανονική λήψη" : (SelectedNotif.taken == 2 ? "Λήψη με καθυστέρηση" : (SelectedNotif.taken == 3 ? "Μη πραγματοποιημένη λήψη" : (SelectedNotif.taken == 4 ? "Αίτηση αναβολής" : "Ανεπιβεβαίωτη λήψη")))}}
+            </span></b>
+            <select ng-model="SelectedNotif.taken" ng-change="takesHistorySave()" ng-show="(SelectedParams.curPwd > 0)">
               <option value= "1">Κανονική λήψη</option>
               <option value= "2">Λήψη με καθυστέρηση</option>
               <option value= "3">Μη πραγματοποιημένη λήψη</option>

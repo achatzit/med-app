@@ -6,6 +6,7 @@
   <ion-content>
     <div class="col col-center" style="text-align:center;" ng-model="medBehaviour()" >
       <h4>Συμπεριφορά</h4>
+      <h4>{{score2 > 80 ? "Πολύ καλή" : (score2 > 60 ? "Καλή" : (score2 > 40 ? "Μέτρια" : (score2 > 20 ? "Κακή" : "Πολύ κακή")))}} ({{score2 | number:1}}%)</h4>
       <h5>Κανονικές λήψεις: {{intakes1}}/{{sum1}} ({{behaviour1 | number:0}}%)</h5>
       <h5>Με καθυστέρηση: {{intakes2}}/{{sum1}} ({{behaviour2 | number:0}}%)</h5>
       <h5>Μη πραγματοποιημένες λήψεις: {{intakes3}}/{{sum1}} ({{behaviour3 | number:0}}%)</h5>
@@ -14,7 +15,7 @@
     </div>
 
    <ion-list>
-      <ion-item class="item-remove-animate item-avatar item-icon-left item-icon-right" ng-repeat="notif in notifs" type="item-text-wrap"  href="#/tab/options/0/{{notif.$id}}">
+     <ion-item class="item-remove-animate item-avatar item-icon-left item-icon-right" ng-repeat="notif in notifs" type="item-text-wrap"  ng-href="#/tab/options/0/{{notif.$id}}">
         <i ng-show={{notif.taken=="1"}} class="icon ion-checkmark-round"></i>
         <i ng-show={{notif.taken=="2"}} class="icon ion-clock"></i>
         <i ng-show={{notif.taken=="3"}} class="icon ion-close-circled"></i>

@@ -25,13 +25,24 @@ angular.module('starter', ['ionic', 'firebase', 'starter.controllers', 'ngCordov
 
 
 
-.run(function($ionicPlatform, $filter, $ionicPopup, $rootScope, $timeout) {
-
+.run(function($ionicPlatform, $filter, $ionicPopup, $rootScope, $firebaseObject, $timeout) {
 
 
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
+
+    var ref = new Firebase("https://fir-project-68529.firebaseio.com/params");
+    $rootScope.SelectedParams = $firebaseObject(ref);
+    $rootScope.behaviourLevel = $rootScope.SelectedParams.behaviour;
+    $rootScope.sms = $rootScope.SelectedParams.sms;
+    $rootScope.pwd0 = $rootScope.SelectedParams.pwd0;
+    $rootScope.pwd2 = $rootScope.SelectedParams.pwd2;
+    $rootScope.pwd2 = $rootScope.SelectedParams.pwd2;
+    $rootScope.curPwd = $rootScope.SelectedParams.curPwd;
+//    alert($rootScope.SelectedParams.curPwd);
+
+
 
     if(device.platform === "iOS") {
         window.plugin.notification.local.promptForPermission();
@@ -61,6 +72,9 @@ angular.module('starter', ['ionic', 'firebase', 'starter.controllers', 'ngCordov
       function(event) { alert('failure setting UUID');
       }
     );
+
+
+
 
 /*
     Pebble.launchApp(
@@ -126,33 +140,19 @@ angular.module('starter', ['ionic', 'firebase', 'starter.controllers', 'ngCordov
                       onTap: function(e) {
                         var update_ref = notif_ref.child(snapshot.key());
                         update_ref.update({ taken: $rootScope.choice.id.toString()});
-                        switch ($rootScope.choice.id) {
-                            case 1:
+//                        switch ($rootScope.choice.id) {
+//                            case 1:
                                 cordova.plugins.notification.local.clear(notification.id, function() {
                                 });
-                                break;
-                            case 2:
-                                cordova.plugins.notification.local.clear(notification.id, function() {
-                                });
-                                break;
-                            case 3:
-                                cordova.plugins.notification.local.clear(notification.id, function() {
-                                });
-                                break;
-                            case 4:
-                                cordova.plugins.notification.local.clear(notification.id, function() {
-                                });
-                                break;
-                          default:
-
-                        }
+                                $rootScope.checkDropBehaviour();
+//                              break;
+//                      }
                       }
                     }
                   ]
                 });
 
               });
-
 
         });
 
@@ -231,10 +231,11 @@ cordova.plugins.notification.local.on("click", function (notification) {
     views: {
       'tab-home': {
         templateUrl: 'templates/tab-home.html',
-        controller: 'HomeCtrl'
+        controller: 'NotifListCtrl'
       }
     }
   })
+
   .state('tab.meds', {
     url: '/meds',
     views: {
@@ -244,6 +245,7 @@ cordova.plugins.notification.local.on("click", function (notification) {
       }
     }
   })
+
   .state('tab.med-detail', {
     url: '/meds/:medID',
     views: {
@@ -320,6 +322,16 @@ cordova.plugins.notification.local.on("click", function (notification) {
       'tab-options': {
         templateUrl: 'templates/tab-pebble.html',
         controller: 'MedicineCtrl'
+      }
+    }
+  })
+
+  .state('tab.params', {
+    url: '/options/4',
+    views: {
+      'tab-options': {
+        templateUrl: 'templates/tab-params.html',
+        controller: 'ParamsCtrl'
       }
     }
   });
